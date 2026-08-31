@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Aplus Scholar cung cấp hỗ trợ học thuật, phương pháp nghiên cứu và phân tích dữ liệu cho người học." />
+    <title>Aplus Scholar | Đồng hành cùng hành trình học thuật</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .wordmark { display: block; width: 100%; height: auto; overflow: visible; }
+      .hero-media-caption { z-index: 3; display: block; width: 174px; min-height: 0; left: 20px; bottom: 20px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+      .intro-section h2 { font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif; font-size: clamp(2.7rem, 4.45vw, 4.9rem); font-weight: 400; letter-spacing: -.055em; line-height: 1.03; }
+      .section-mark { display: block; width: 128px; overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; line-height: 0; }
+      .academic-emblem { display: block; width: 100%; height: auto; overflow: visible; }
+      .footer-logo { width: 145px; }
+      .logo-filter-definitions { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+      .contact-channels { display: grid; gap: 10px; width: min(100%, 370px); margin-top: 28px; }
+      .contact-channel { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 13px; min-height: 66px; padding: 11px 15px; border: 1px solid rgba(186, 207, 255, .28); border-radius: 12px; background: rgba(10, 37, 88, .58); transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+      .contact-channel:hover { transform: translateY(-2px); border-color: rgba(213, 226, 255, .65); background: rgba(13, 46, 105, .78); }
+      .contact-channel:active { transform: translateY(0) scale(.99); }
+      .contact-channel-icon { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(205, 220, 255, .34); border-radius: 10px; background: rgba(196, 215, 255, .10); }
+      .contact-channel-icon img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+      .contact-channel-copy { min-width: 0; }
+      .contact-channel-label { display: block; margin-bottom: 2px; color: #9ebdff; font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+      .contact-channel-value { display: block; color: var(--white); font-size: 18px; font-weight: 760; letter-spacing: -.025em; line-height: 1.2; }
+      .hero { position: relative; }
+      .hero::before { content: ""; position: absolute; width: 330px; height: 330px; left: -170px; bottom: 16px; border: 1px solid rgba(168, 198, 255, .42); border-radius: 50%; box-shadow: inset 0 0 0 16px rgba(168, 198, 255, .065), inset 0 0 0 52px rgba(168, 198, 255, .04), 0 0 48px rgba(56, 112, 235, .12); pointer-events: none; }
+      .hero::after { content: "Aplus / Research archive"; position: absolute; left: 0; bottom: 19px; color: rgba(214, 226, 255, .7); font-size: 10px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); pointer-events: none; }
+      .intro-section { position: relative; }
+      .intro-section::after { content: "A+"; position: absolute; right: -11vw; top: 42px; color: rgba(157, 187, 255, .10); font-size: min(27vw, 370px); font-weight: 800; letter-spacing: -.16em; line-height: 1; text-shadow: 0 0 40px rgba(94, 143, 255, .12); pointer-events: none; }
+      .services-section { position: relative; overflow: hidden; }
+      .services-section::before { content: ""; position: absolute; width: 395px; height: 510px; right: -200px; top: 85px; border: 1px solid rgba(180, 203, 255, .30); transform: rotate(21deg); box-shadow: inset 0 0 0 14px rgba(180, 203, 255, .05), inset 0 0 0 42px rgba(180, 203, 255, .03), 0 0 60px rgba(54, 110, 233, .11); pointer-events: none; }
+      .services-section::after { content: "HỌC SÂU. LẬP LUẬN VỮNG."; position: absolute; right: 35px; bottom: 28px; color: rgba(213, 226, 255, .68); font-size: 10px; font-weight: 800; letter-spacing: .14em; pointer-events: none; }
+      .process-section { position: relative; }
+      .process-section::before { content: ""; position: absolute; left: -50px; top: 147px; height: 310px; border-left: 1px solid rgba(189, 210, 255, .42); box-shadow: 7px 0 0 -6px rgba(189, 210, 255, .42), 14px 0 0 -13px rgba(189, 210, 255, .42); }
+      .process-section::after { content: "METHOD / DATA / INSIGHT"; position: absolute; left: -53px; top: 475px; color: rgba(211, 225, 255, .68); font-size: 9px; font-weight: 800; letter-spacing: .15em; writing-mode: vertical-rl; }
+      @media (max-width: 850px) { .hero::before { width: 220px; height: 220px; left: -135px; bottom: 10px; } .hero::after, .process-section::before, .process-section::after { display: none; } .intro-section::after { right: -18vw; top: 12px; font-size: 255px; } .services-section::after { right: 18px; } }
+      @media (max-width: 560px) { .hero::before { display: none; } .intro-section::after { font-size: 190px; right: -65px; top: 30px; } .services-section::before { width: 260px; height: 360px; right: -145px; top: 112px; } .services-section::after { font-size: 8px; bottom: 16px; } }
+    </style>
+  </head>
+  <body>
+    <svg class="logo-filter-definitions" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="logo-white-key" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+          <feColorMatrix
+            in="SourceGraphic"
+            result="keyed-logo"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  .82 .82 .82 0 -.58"
+          />
+          <feMorphology in="keyed-logo" operator="dilate" radius="1.6" result="crisp-logo" />
+          <feFlood flood-color="#ffffff" result="logo-white" />
+          <feComposite in="logo-white" in2="crisp-logo" operator="in" />
+        </filter>
+        <filter id="academic-line-key" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+          <feColorMatrix
+            in="SourceGraphic"
+            result="academic-lines"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1.5 -1.5 -1.5 0 4.15"
+          />
+          <feComposite in="academic-lines" in2="SourceGraphic" operator="in" result="academic-keyed" />
+          <feMorphology in="academic-keyed" operator="dilate" radius=".7" result="academic-crisp" />
+          <feFlood flood-color="#dbe7ff" result="academic-white" />
+          <feComposite in="academic-white" in2="academic-crisp" operator="in" />
+        </filter>
+        <clipPath id="logo-wordmark-crop" clipPathUnits="userSpaceOnUse">
+          <rect x="180" y="500" width="900" height="345" />
+          <rect x="180" y="448" width="350" height="52" />
+          <rect x="730" y="465" width="75" height="35" />
+        </clipPath>
+      </defs>
+    </svg>
+    <div class="site-shell">
+      <header class="site-header" id="top">
+        <a class="brand" href="#top" aria-label="Aplus Scholar, về đầu trang">
+          <svg class="wordmark" viewBox="180 440 900 405" aria-hidden="true" focusable="false">
+            <image href="assets/aplus-scholar-logo.png" width="1254" height="1254" filter="url(#logo-white-key)" clip-path="url(#logo-wordmark-crop)" />
+          </svg>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Danh mục</button>
+        <nav class="main-nav" id="main-nav" aria-label="Điều hướng chính">
+          <a href="#about">Về Aplus</a>
+          <a href="#services">Dịch vụ</a>
+          <a href="#process">Quy trình</a>
+          <a href="#contact" class="nav-cta">Nhận tư vấn</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Aplus Scholar</p>
+            <h1 id="hero-title">Học sâu hơn.<br />Đi xa hơn.</h1>
+            <p class="hero-intro">Aplus Scholar giúp bạn làm chủ phương pháp, dữ liệu và cách trình bày một nghiên cứu thuyết phục.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#contact">Nhận tư vấn</a>
+              <a class="text-link" href="#services">Khám phá dịch vụ <span aria-hidden="true">↘</span></a>
+            </div>
+          </div>
+          <div class="hero-media">
+            <img src="assets/hero-library.png" alt="Sinh viên đang nghiên cứu trong thư viện hiện đại" />
+            <div class="hero-media-caption" aria-hidden="true">
+              <svg class="wordmark" viewBox="180 440 900 405" focusable="false">
+                <image href="assets/aplus-scholar-logo.png" width="1254" height="1254" filter="url(#logo-white-key)" clip-path="url(#logo-wordmark-crop)" />
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="principles" aria-label="Cam kết của Aplus Scholar">
+          <p>Định hướng rõ ràng</p>
+          <p>Quy trình minh bạch</p>
+          <p>Học thuật có trách nhiệm</p>
+        </section>
+
+        <section class="intro-section" id="about" aria-labelledby="about-title">
+          <div class="section-mark" role="img" aria-label="Sách mở, ngôi sao và nguyệt quế">
+            <svg class="academic-emblem" viewBox="180 180 894 894" aria-hidden="true" focusable="false">
+              <image href="assets/academic-emblem.png" width="1254" height="1254" filter="url(#academic-line-key)" />
+            </svg>
+          </div>
+          <div>
+            <p class="eyebrow">Về chúng tôi</p>
+            <h2 id="about-title">Để mỗi bài làm là dấu ấn tư duy của riêng bạn.</h2>
+          </div>
+          <div class="intro-body">
+            <p>Aplus Scholar đồng hành từ lúc bạn xác định câu hỏi cho đến khi hoàn thiện cấu trúc, dữ liệu và cách trình bày.</p>
+            <p>Chúng tôi làm rõ phương pháp để bạn hiểu sâu hơn về chính kết quả mà mình bảo vệ.</p>
+          </div>
+        </section>
+
+        <section class="services-section" id="services" aria-labelledby="services-title">
+          <div class="section-heading">
+            <p class="eyebrow">Danh mục hỗ trợ</p>
+            <h2 id="services-title">Đúng nhu cầu, đúng chuyên môn.</h2>
+          </div>
+          <div class="service-explorer">
+            <div class="service-tabs" role="tablist" aria-label="Nhóm dịch vụ">
+              <button class="service-tab is-active" type="button" role="tab" aria-selected="true" data-service="academic">Học thuật</button>
+              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="data">Dữ liệu</button>
+              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="analysis">Phân tích</button>
+              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="integrity">Tính nguyên gốc</button>
+              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="creative">Trình bày</button>
+            </div>
+            <article class="service-feature" id="service-panel" role="tabpanel">
+              <div class="service-index" id="service-index">01</div>
+              <div class="service-content">
+                <p class="service-kicker" id="service-kicker">Hỗ trợ học thuật</p>
+                <h3 id="service-title">Từ đề cương đến bài nghiên cứu có cấu trúc.</h3>
+                <p id="service-description">Làm rõ yêu cầu, phương pháp và cách trình bày để bạn tự tin phát triển bài làm.</p>
+              </div>
+              <ul class="service-list" id="service-list">
+                <li>Phương pháp nghiên cứu khoa học</li>
+                <li>Nghiên cứu khoa học</li>
+                <li>Khóa luận và chuyên đề tốt nghiệp</li>
+                <li>Báo cáo thực tập, assignment, đề cương, tiểu luận</li>
+              </ul>
+            </article>
+          </div>
+          <p class="service-note">Mỗi yêu cầu được trao đổi riêng để xác định phạm vi, tiến độ và phương án phù hợp.</p>
+        </section>
+
+        <section class="process-section" id="process" aria-labelledby="process-title">
+          <div class="process-intro">
+            <p class="eyebrow">Cách Aplus đồng hành</p>
+            <h2 id="process-title">Rõ ràng từ cuộc trao đổi đầu tiên.</h2>
+            <a class="text-link" href="#contact">Bắt đầu trao đổi <span aria-hidden="true">↘</span></a>
+          </div>
+          <ol class="process-list">
+            <li>
+              <span>01</span>
+              <div><h3>Lắng nghe yêu cầu</h3><p>Trao đổi mục tiêu, môn học, mốc thời gian và phạm vi hỗ trợ.</p></div>
+            </li>
+            <li>
+              <span>02</span>
+              <div><h3>Đề xuất phương án</h3><p>Làm rõ cách tiếp cận, hạng mục cần thực hiện và chi phí trước khi bắt đầu.</p></div>
+            </li>
+            <li>
+              <span>03</span>
+              <div><h3>Đồng hành thực hiện</h3><p>Cập nhật theo tiến độ, giải thích các nội dung quan trọng và tiếp nhận phản hồi.</p></div>
+            </li>
+            <li>
+              <span>04</span>
+              <div><h3>Bàn giao minh bạch</h3><p>Hoàn thiện theo phạm vi đã thống nhất, kèm lưu ý để bạn có thể chủ động bảo vệ kết quả.</p></div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="editorial-block" aria-label="Cam kết học thuật">
+          <p class="editorial-quote">“Hiểu đúng phương pháp<br />là nền tảng của kết quả tốt.”</p>
+          <div class="editorial-copy">
+            <h2>Kiến thức là của bạn.</h2>
+            <p>Aplus Scholar hỗ trợ bạn tiếp cận phương pháp và công cụ phù hợp. Quyết định học tập, tư duy phản biện và trách nhiệm học thuật luôn thuộc về người học.</p>
+          </div>
+        </section>
+
+        <section class="contact-section" id="contact" aria-labelledby="contact-title">
+          <div class="contact-copy">
+            <p class="eyebrow">Trao đổi cùng Aplus</p>
+            <h2 id="contact-title">Bạn đang ở đâu trên hành trình nghiên cứu?</h2>
+            <p>Gửi yêu cầu để nhận định hướng phù hợp. Đội ngũ tư vấn sẽ phản hồi qua số điện thoại bạn để lại.</p>
+            <div class="contact-channels" aria-label="Kênh tư vấn">
+              <a class="contact-channel" href="tel:0767816876" aria-label="Gọi tư vấn qua số 0767 816 876">
+                <span class="contact-channel-icon" aria-hidden="true"><img src="assets/phone-call.svg" alt="" /></span>
+                <span class="contact-channel-copy">
+                  <span class="contact-channel-label">Gọi tư vấn</span>
+                  <strong class="contact-channel-value">0767 816 876</strong>
+                </span>
+              </a>
+              <a class="contact-channel" href="https://zalo.me/0767816876" target="_blank" rel="noopener noreferrer" aria-label="Nhắn tin Aplus Scholar qua Zalo">
+                <span class="contact-channel-icon" aria-hidden="true"><img src="assets/zalo.svg" alt="" /></span>
+                <span class="contact-channel-copy">
+                  <span class="contact-channel-label">Nhắn qua Zalo</span>
+                  <strong class="contact-channel-value">Aplus Scholar</strong>
+                </span>
+              </a>
+            </div>
+          </div>
+          <form class="contact-form" id="consultation-form" novalidate>
+            <div class="form-field">
+              <label for="name">Họ và tên</label>
+              <input id="name" name="name" type="text" autocomplete="name" placeholder="Nhập họ và tên" required />
+            </div>
+            <div class="form-field">
+              <label for="phone">Số điện thoại</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Nhập số điện thoại" required />
+            </div>
+            <div class="form-field">
+              <label for="need">Nhu cầu hỗ trợ</label>
+              <select id="need" name="need" required>
+                <option value="">Chọn nhóm dịch vụ</option>
+                <option>Hỗ trợ học thuật</option>
+                <option>Thu thập và xử lý dữ liệu</option>
+                <option>Phân tích số liệu</option>
+                <option>Kiểm tra tính nguyên gốc</option>
+                <option>Trình bày và dịch vụ số</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="message">Nội dung cần trao đổi</label>
+              <textarea id="message" name="message" rows="3" placeholder="Môn học, chủ đề hoặc mốc thời gian của bạn"></textarea>
+            </div>
+            <button class="button button-primary form-submit" type="submit">Gửi yêu cầu</button>
+            <p class="form-status" id="form-status" aria-live="polite"></p>
+          </form>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-brand">
+          <div class="footer-logo" role="img" aria-label="Aplus Scholar">
+            <svg class="wordmark" viewBox="180 440 900 405" aria-hidden="true" focusable="false">
+              <image href="assets/aplus-scholar-logo.png" width="1254" height="1254" filter="url(#logo-white-key)" clip-path="url(#logo-wordmark-crop)" />
+            </svg>
+          </div>
+          <p>Đồng hành cùng hành trình học tập và nghiên cứu có trách nhiệm.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#about">Về Aplus</a>
+          <a href="#services">Dịch vụ</a>
+          <a href="#process">Quy trình</a>
+          <a href="tel:0767816876">0767 816 876</a>
+        </div>
+        <p class="copyright">© 2026 Aplus Scholar. All rights reserved.</p>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
