@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="styles.css" />
     <style>
       .wordmark { display: block; width: 100%; height: auto; overflow: visible; }
-      .hero-media-caption { z-index: 3; display: block; width: 174px; min-height: 0; left: 20px; bottom: 20px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+      .hero-media-caption { position: absolute; z-index: 3; isolation: isolate; display: block; width: 174px; min-height: 0; left: 20px; bottom: 42px; padding: 8px 10px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+      .hero-media-caption::before { content: ""; position: absolute; inset: -22px -30px; z-index: -1; border-radius: 22px; background: radial-gradient(ellipse at 20% 54%, rgba(2, 15, 40, .78), rgba(2, 15, 40, .34) 52%, transparent 79%); filter: blur(10px); pointer-events: none; }
+      .hero-media-caption .wordmark { filter: drop-shadow(0 2px 5px rgba(1, 10, 28, .62)); }
       .intro-section h2 { font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif; font-size: clamp(2.7rem, 4.45vw, 4.9rem); font-weight: 400; letter-spacing: -.055em; line-height: 1.03; }
       .section-mark { display: block; width: 128px; overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; line-height: 0; }
       .academic-emblem { display: block; width: 100%; height: auto; overflow: visible; }
@@ -34,8 +36,8 @@
       .process-section { position: relative; }
       .process-section::before { content: ""; position: absolute; left: -50px; top: 147px; height: 310px; border-left: 1px solid rgba(189, 210, 255, .42); box-shadow: 7px 0 0 -6px rgba(189, 210, 255, .42), 14px 0 0 -13px rgba(189, 210, 255, .42); }
       .process-section::after { content: "METHOD / DATA / INSIGHT"; position: absolute; left: -53px; top: 475px; color: rgba(211, 225, 255, .68); font-size: 9px; font-weight: 800; letter-spacing: .15em; writing-mode: vertical-rl; }
-      @media (max-width: 850px) { .hero::before { width: 220px; height: 220px; left: -135px; bottom: 10px; } .hero::after, .process-section::before, .process-section::after { display: none; } .intro-section::after { right: -18vw; top: 12px; font-size: 255px; } .services-section::after { right: 18px; } }
-      @media (max-width: 560px) { .hero::before { display: none; } .intro-section::after { font-size: 190px; right: -65px; top: 30px; } .services-section::before { width: 260px; height: 360px; right: -145px; top: 112px; } .services-section::after { font-size: 8px; bottom: 16px; } }
+      @media (max-width: 850px) { .hero::before { width: 220px; height: 220px; left: -135px; bottom: 10px; } .hero::after, .process-section::before, .process-section::after { display: none; } .hero-media-caption { left: -10px; bottom: 28px; } .intro-section::after { right: -18vw; top: 12px; font-size: 255px; } .services-section::after { right: 18px; } }
+      @media (max-width: 560px) { .hero::before { display: none; } .hero-media-caption { left: 10px; bottom: 18px; width: 154px; padding: 6px 8px; } .intro-section::after { font-size: 190px; right: -65px; top: 30px; } .services-section::before { width: 260px; height: 360px; right: -145px; top: 112px; } .services-section::after { font-size: 8px; bottom: 16px; } }
     </style>
   </head>
   <body>
