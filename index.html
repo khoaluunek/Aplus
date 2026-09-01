@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles.css" />
     <style>
       .wordmark { display: block; width: 100%; height: auto; overflow: visible; }
-      .hero-media-caption { position: absolute; z-index: 3; isolation: isolate; display: block; width: 174px; min-height: 0; left: 20px; bottom: 42px; padding: 8px 10px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+      .hero-media-caption { position: absolute; z-index: 3; isolation: isolate; display: block; width: 174px; min-height: 0; left: 20px; bottom: 42px; padding: 8px 10px; border: 1px solid rgba(218, 231, 255, .26); border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.025)), rgba(4, 20, 54, .36); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), inset 0 -1px 0 rgba(150,183,255,.08), 0 16px 34px rgba(0,0,0,.18); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); }
       .hero-media-caption::before { content: ""; position: absolute; inset: -22px -30px; z-index: -1; border-radius: 22px; background: radial-gradient(ellipse at 20% 54%, rgba(2, 15, 40, .78), rgba(2, 15, 40, .34) 52%, transparent 79%); filter: blur(10px); pointer-events: none; }
       .hero-media-caption .wordmark { filter: drop-shadow(0 2px 5px rgba(1, 10, 28, .62)); }
       .intro-section h2 { font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif; font-size: clamp(2.7rem, 4.45vw, 4.9rem); font-weight: 400; letter-spacing: -.055em; line-height: 1.03; }
@@ -17,10 +17,10 @@
       .footer-logo { width: 145px; }
       .logo-filter-definitions { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
       .contact-channels { display: grid; gap: 10px; width: min(100%, 370px); margin-top: 28px; }
-      .contact-channel { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 13px; min-height: 66px; padding: 11px 15px; border: 1px solid rgba(186, 207, 255, .28); border-radius: 12px; background: rgba(10, 37, 88, .58); transition: transform .2s ease, border-color .2s ease, background .2s ease; }
-      .contact-channel:hover { transform: translateY(-2px); border-color: rgba(213, 226, 255, .65); background: rgba(13, 46, 105, .78); }
+      .contact-channel { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 13px; min-height: 66px; padding: 11px 15px; border: 1px solid rgba(216, 230, 255, .38); border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,.13), rgba(255,255,255,.025)), rgba(10, 37, 88, .44); box-shadow: inset 0 1px 0 rgba(255,255,255,.21), inset 0 -1px 0 rgba(160,190,255,.08), 0 16px 32px rgba(0,0,0,.12); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+      .contact-channel:hover { transform: translateY(-2px); border-color: rgba(213, 226, 255, .65); background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.04)), rgba(13, 46, 105, .6); }
       .contact-channel:active { transform: translateY(0) scale(.99); }
-      .contact-channel-icon { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(205, 220, 255, .34); border-radius: 10px; background: rgba(196, 215, 255, .10); }
+      .contact-channel-icon { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(215, 229, 255, .36); border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,.17), rgba(255,255,255,.035)), rgba(196, 215, 255, .08); box-shadow: inset 0 1px 0 rgba(255,255,255,.2); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
       .contact-channel-icon img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
       .contact-channel-copy { min-width: 0; }
       .contact-channel-label { display: block; margin-bottom: 2px; color: #9ebdff; font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
