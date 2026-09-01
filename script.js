@@ -25,7 +25,7 @@ const serviceData = {
     kicker: "Kiểm tra",
     title: "Kiểm tra kỹ trước khi nộp bài.",
     description: "Hỗ trợ kiểm tra mức độ tương đồng và nhận diện dấu hiệu AI để bạn chủ động rà soát nội dung.",
-    items: ["Kiểm tra độ tương đồng Turnitin", "Kiểm tra AI Turnitin", "Rà soát trích dẫn và nguồn tham khảo", "Gợi ý chỉnh sửa để nội dung rõ ràng hơn"]
+    items: ["Kiểm tra đạo văn Turnitin", "Kiểm tra AI Turnitin", "Rà soát trích dẫn và nguồn tham khảo", "Gợi ý chỉnh sửa để nội dung rõ ràng hơn"]
   },
   creative: {
     index: "05",
