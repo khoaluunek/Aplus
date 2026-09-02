@@ -31,6 +31,16 @@ tabs.forEach((tab, index) => {
   });
 });
 
+const reasonItems = [...document.querySelectorAll(".why-accordion details")];
+reasonItems.forEach((item) => {
+  item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    reasonItems.forEach((otherItem) => {
+      if (otherItem !== item) otherItem.open = false;
+    });
+  });
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".main-nav");
 menuToggle.addEventListener("click", () => {

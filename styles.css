@@ -44,3 +44,25 @@
 .why-section{padding:118px 0;border-top:1px solid rgba(205,222,255,.44);border-bottom:1px solid rgba(205,222,255,.44)}.why-copy .eyebrow{margin-bottom:20px;font-size:15px;letter-spacing:.21em}.why-accordion{border-top-color:rgba(205,222,255,.48)}.why-accordion details{border-bottom-color:rgba(205,222,255,.4)}.why-accordion summary{grid-template-columns:55px 1fr 30px;gap:15px;min-height:74px;padding:17px 48px 17px 0;font-size:20px;font-weight:780}.why-accordion summary span{font-size:16px}.why-accordion summary::after{width:30px;height:30px;font-size:23px}.why-accordion details p{margin-right:48px;margin-left:70px;font-size:17px}
 @media(max-width:850px){.why-section{padding:94px 0}}
 @media(max-width:560px){.why-section{padding:72px 0}.why-copy .eyebrow{font-size:13px}.why-accordion summary{grid-template-columns:45px 1fr 27px;gap:10px;min-height:68px;padding-right:42px;font-size:18px}.why-accordion summary span{font-size:15px}.why-accordion summary::after{width:27px;height:27px;font-size:21px}.why-accordion details p{margin-right:23px;margin-left:55px;font-size:16px}}
+
+/* Refined disclosure feedback for the academic reasons accordion. */
+.why-accordion{display:grid;gap:8px;padding:10px 0;border-top:1px solid rgba(205,222,255,.48);border-bottom:1px solid rgba(205,222,255,.48)}
+.why-accordion details{position:relative;isolation:isolate;overflow:hidden;margin:0 -18px;padding:0 18px;border:1px solid transparent;border-radius:14px;background:rgba(255,255,255,0);box-shadow:0 0 0 rgba(1,13,40,0);transition:transform .32s cubic-bezier(.16,1,.3,1),border-color .32s ease,background .32s ease,box-shadow .32s ease}
+.why-accordion details::before{content:"";position:absolute;top:18px;bottom:18px;left:0;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#dce8ff,#7fa8ff);box-shadow:0 0 18px rgba(127,168,255,.38);opacity:0;transform:scaleY(.35);transform-origin:center;transition:opacity .28s ease,transform .38s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.why-accordion details:not([open]):hover{border-color:rgba(185,208,255,.18);background:rgba(117,157,235,.055);transform:translateX(3px)}
+.why-accordion details[open]{margin-top:4px;margin-bottom:4px;border-color:rgba(205,222,255,.48);background:radial-gradient(circle at 12% 0%,rgba(214,228,255,.2),transparent 34%),linear-gradient(118deg,rgba(255,255,255,.13),rgba(111,157,246,.065) 52%,rgba(160,193,255,.11)),rgba(10,39,97,.58);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(155,190,255,.1),0 18px 42px rgba(1,13,40,.23);-webkit-backdrop-filter:blur(22px) saturate(155%);backdrop-filter:blur(22px) saturate(155%);transform:translateX(5px)}
+.why-accordion details[open]::before{opacity:1;transform:scaleY(1)}
+.why-accordion summary{transition:color .25s ease,transform .2s ease}
+.why-accordion summary:active{transform:scale(.995)}
+.why-accordion summary span{display:grid;place-items:center;justify-self:start;width:36px;height:27px;border:1px solid transparent;border-radius:8px;transition:color .3s ease,border-color .3s ease,background .3s ease,box-shadow .3s ease}
+.why-accordion details[open] summary{color:#fff}
+.why-accordion details[open] summary span{border-color:rgba(211,226,255,.38);background:rgba(190,213,255,.14);color:#dce8ff;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.why-accordion summary::after{transition:color .28s ease,border-color .28s ease,background .28s ease,box-shadow .28s ease,transform .2s ease}
+.why-accordion details[open] summary::after{content:"\2212";border-color:rgba(226,237,255,.72);background:rgba(220,233,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 6px 16px rgba(1,13,40,.2);color:#fff;transform:none}
+.why-accordion details p{padding-top:17px;border-top:1px solid rgba(205,222,255,.2)}
+.why-accordion details[open] p{animation:why-answer-in .38s cubic-bezier(.16,1,.3,1) both}
+.why-accordion summary:focus-visible{border-radius:10px;outline:3px solid rgba(193,215,255,.72);outline-offset:-3px}
+@keyframes why-answer-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-transparency:reduce){.why-accordion details[open]{background:#0a2865;-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media(prefers-reduced-motion:reduce){.why-accordion details,.why-accordion details::before,.why-accordion summary,.why-accordion summary span,.why-accordion summary::after{transition:none}.why-accordion details[open] p{animation:none}}
+@media(max-width:560px){.why-accordion{gap:6px}.why-accordion details{margin:0 -10px;padding:0 10px;border-radius:12px}.why-accordion details[open]{transform:translateX(2px)}.why-accordion summary span{width:32px;height:25px}.why-accordion details p{padding-top:14px}}
