@@ -104,15 +104,15 @@
 .about-identity{align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:27px;padding-right:26px;border-right:1px solid rgba(205,222,255,.2)}
 .about-identity .section-mark{width:126px}
 .about-tenure{display:grid;gap:5px}
-.about-tenure strong{color:#f2f6ff;font-size:clamp(2.7rem,3.5vw,3.65rem);font-weight:760;letter-spacing:-.065em;line-height:1}
-.about-tenure span{max-width:110px;color:#a9bde4;font-size:12px;font-weight:800;letter-spacing:.12em;line-height:1.45;text-transform:uppercase}
+.about-tenure strong{color:#f2f6ff;font-size:clamp(3.45rem,4.3vw,4.6rem);font-weight:760;letter-spacing:-.065em;line-height:1}
+.about-tenure span{max-width:130px;color:#a9bde4;font-size:14px;font-weight:800;letter-spacing:.11em;line-height:1.4;text-transform:uppercase}
 .about-heading{align-self:center}
-.about-heading .eyebrow{font-size:12px}
-.about-heading .about-est{margin:-5px 0 18px;font-size:14px}
+.about-heading .eyebrow{font-size:15px;letter-spacing:.16em}
+.about-heading .about-est{margin:-3px 0 18px;font-size:16px}
 .intro-section .about-heading h2{max-width:660px;margin-bottom:0;font-size:clamp(3.45rem,4.8vw,5.1rem);line-height:1.01}
 .intro-section .intro-body{align-self:center;max-width:480px;padding:0;color:#c1cfea;font-size:19px;line-height:1.68}
 .intro-section .intro-body p+p{margin-top:25px}
 
 @media(max-width:1100px){.intro-section{grid-template-columns:140px minmax(0,1.05fr) minmax(300px,.85fr);gap:36px}.about-identity{padding-right:18px}.about-identity .section-mark{width:110px}.intro-section .about-heading h2{font-size:clamp(3rem,5.3vw,4.1rem)}.intro-section .intro-body{font-size:17px}}
 @media(max-width:850px){.intro-section{width:min(100% - 40px,700px);grid-template-columns:1fr;gap:35px;padding:96px 0 104px}.about-identity{align-self:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:24px;padding:0 0 27px;border-right:0;border-bottom:1px solid rgba(205,222,255,.2)}.about-identity .section-mark{width:100px}.about-tenure span{max-width:none}.intro-section .about-heading h2{max-width:680px;font-size:clamp(3rem,8.5vw,4.2rem)}.intro-section .intro-body{grid-column:auto;max-width:650px;font-size:18px}}
-@media(max-width:560px){.intro-section{width:min(100% - 32px,640px);gap:29px;padding:72px 0 78px}.about-identity{gap:18px;padding-bottom:22px}.about-identity .section-mark{width:84px}.about-tenure strong{font-size:2.4rem}.about-tenure span{max-width:100px;font-size:10px}.about-heading .eyebrow{font-size:11px;line-height:1.5}.about-heading .about-est{margin-top:-4px;font-size:12px}.intro-section .about-heading h2{font-size:clamp(2.65rem,12vw,3.5rem)}.intro-section .intro-body{font-size:17px;line-height:1.65}.intro-section .intro-body p+p{margin-top:20px}}
+@media(max-width:560px){.intro-section{width:min(100% - 32px,640px);gap:29px;padding:72px 0 78px}.about-identity{gap:18px;padding-bottom:22px}.about-identity .section-mark{width:84px}.about-tenure strong{font-size:3rem}.about-tenure span{max-width:112px;font-size:12px}.about-heading .eyebrow{font-size:13px;line-height:1.5}.about-heading .about-est{margin-top:-2px;font-size:14px}.intro-section .about-heading h2{font-size:clamp(2.65rem,12vw,3.5rem)}.intro-section .intro-body{font-size:17px;line-height:1.65}.intro-section .intro-body p+p{margin-top:20px}}
