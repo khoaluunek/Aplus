@@ -211,3 +211,53 @@
   .form-privacy-link,.response-note,.form-email-fallback{grid-column:auto}
   .form-privacy-link{margin-left:29px}
 }
+
+/* Feedback pass: transparent pricing, supplementary capability and mobile safe area. */
+.service-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.form-trap{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.form-status.is-success{margin-top:0;padding:15px 17px;border:1px solid rgba(181,218,196,.45);border-radius:12px;background:rgba(52,117,82,.22);color:#e6fff0;font-size:14px;line-height:1.55}
+.form-status.is-error{margin-top:0;padding:15px 17px;border:1px solid rgba(255,196,196,.36);border-radius:12px;background:rgba(130,46,57,.2);line-height:1.55}
+
+.support-section{position:relative;isolation:isolate;width:min(1240px,calc(100% - 56px));display:grid;grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);gap:clamp(56px,8vw,118px);padding:112px 0 118px;margin:0 auto;border-bottom:1px solid rgba(205,222,255,.28)}
+.support-section::before{content:"";position:absolute;z-index:-1;width:330px;height:330px;left:-230px;bottom:52px;border:1px solid rgba(177,204,255,.17);border-radius:50%;box-shadow:0 0 0 24px rgba(177,204,255,.025),0 0 0 58px rgba(177,204,255,.015);pointer-events:none}
+.support-intro{position:sticky;top:104px;align-self:start}
+.support-intro>p:not(.eyebrow){max-width:450px;color:#bdcae3;font-size:17px;line-height:1.68}
+.specialist-roles{margin-top:36px;border-top:1px solid rgba(205,222,255,.3)}
+.specialist-roles p{display:grid;gap:4px;margin:0;padding:17px 0;border-bottom:1px solid rgba(205,222,255,.22)}
+.specialist-roles strong{color:#eef3ff;font-size:15px}
+.specialist-roles span{color:#aebedb;font-size:13px;line-height:1.5}
+.support-work{min-width:0}
+.support-offers{display:grid;gap:8px}
+.support-offers article{display:grid;grid-template-columns:50px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid rgba(205,222,255,.28)}
+.support-offers article:first-child{padding-top:0}
+.support-offers article>span{color:#9dbbff;font-size:14px;font-weight:850}
+.support-offers h3{margin:0 0 7px;color:#f3f6ff;font-size:22px;letter-spacing:-.02em}
+.support-offers p{margin:0;color:#bdcce6;font-size:15px;line-height:1.6}
+.case-notes{margin-top:50px;padding-top:29px;border-top:1px solid rgba(205,222,255,.42)}
+.case-notes-heading{display:grid;grid-template-columns:.7fr 1.3fr;gap:25px;align-items:start;margin-bottom:24px}
+.case-notes-heading .eyebrow{margin:3px 0 0}
+.case-notes-heading>p:last-child{margin:0;color:#aebedb;font-size:14px;line-height:1.55}
+.case-note-grid{display:grid;grid-template-columns:1.08fr .92fr;grid-template-rows:1fr 1fr;gap:12px}
+.case-note-grid article{min-height:160px;padding:22px;border:1px solid rgba(205,222,255,.27);border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(122,163,241,.035)),rgba(8,31,76,.48);box-shadow:inset 0 1px 0 rgba(255,255,255,.13)}
+.case-note-grid article:first-child{grid-row:1/3;display:flex;flex-direction:column;justify-content:flex-end;min-height:332px;background:radial-gradient(circle at 20% 0%,rgba(177,203,255,.2),transparent 38%),linear-gradient(145deg,rgba(39,82,161,.46),rgba(7,28,70,.72))}
+.case-note-grid span{color:#9fbdff;font-size:12px;font-weight:820;letter-spacing:.08em;text-transform:uppercase}
+.case-note-grid h3{margin:13px 0 9px;color:#f4f7ff;font-size:21px;line-height:1.25;letter-spacing:-.025em}
+.case-note-grid p{margin:0;color:#bdcce5;font-size:14px;line-height:1.6}
+
+@media(max-width:850px){
+  html{scroll-padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  .mobile-contact-bar{bottom:calc(10px + env(safe-area-inset-bottom,0px));transition:opacity .24s ease,transform .32s cubic-bezier(.16,1,.3,1)}
+  .mobile-contact-bar.is-suppressed{opacity:0;transform:translateY(calc(100% + 28px));pointer-events:none}
+  .site-footer{padding-bottom:34px}
+  .support-section{width:min(100% - 40px,700px);grid-template-columns:1fr;gap:48px;padding:88px 0 94px}
+  .support-intro{position:static}
+}
+@media(max-width:700px){.service-facts{grid-template-columns:1fr}}
+@media(max-width:560px){
+  .support-section{width:min(100% - 32px,640px);gap:40px;padding:72px 0 78px}
+  .case-notes-heading{grid-template-columns:1fr;gap:8px}
+  .case-note-grid{grid-template-columns:1fr;grid-template-rows:auto}
+  .case-note-grid article,.case-note-grid article:first-child{grid-row:auto;min-height:0}
+  .case-note-grid article:first-child{padding-top:68px}
+}

@@ -70,6 +70,27 @@ nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () =>
   menuToggle.setAttribute("aria-expanded", "false");
 }));
 
+const mobileContactBar = document.querySelector(".mobile-contact-bar");
+const supportingServices = document.getElementById("supporting-services");
+const contactSection = document.getElementById("contact");
+if (mobileContactBar && supportingServices && contactSection && "IntersectionObserver" in window) {
+  let hasReachedSupportingServices = false;
+  let isContactSectionVisible = false;
+  const updateMobileContactBar = () => {
+    mobileContactBar.classList.toggle("is-suppressed", !hasReachedSupportingServices || isContactSectionVisible);
+  };
+  const contactBarObserver = new IntersectionObserver(([entry]) => {
+    hasReachedSupportingServices = entry.isIntersecting || entry.boundingClientRect.top <= 0;
+    updateMobileContactBar();
+  }, { threshold: 0 });
+  const contactSectionObserver = new IntersectionObserver(([entry]) => {
+    isContactSectionVisible = entry.isIntersecting;
+    updateMobileContactBar();
+  }, { threshold: 0.08 });
+  contactBarObserver.observe(supportingServices);
+  contactSectionObserver.observe(contactSection);
+}
+
 const journeyTrack = document.querySelector(".journey-track");
 const journeyCards = [...document.querySelectorAll(".journey-card")];
 const journeyPrevious = document.querySelector("[data-journey-direction='previous']");
@@ -168,7 +189,19 @@ phoneInput.addEventListener("input", () => {
   if (!normalized || /^0\d{9}$/.test(normalized)) setPhoneError();
 });
 
-form.addEventListener("submit", (event) => {
+const maximumBriefFileSize = 3 * 1024 * 1024;
+const allowedBriefExtensions = /\.(pdf|doc|docx)$/i;
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => resolve(String(reader.result).split(",")[1] || ""), { once: true });
+    reader.addEventListener("error", () => reject(new Error("Không thể đọc tệp đã chọn.")), { once: true });
+    reader.readAsDataURL(file);
+  });
+}
+
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = form.elements.name.value.trim();
   const phone = phoneInput.value.replace(/\s/g, "");
@@ -185,28 +218,49 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  const fileName = briefFileInput.files[0]?.name || "Không có";
-  const emailBody = [
-    `Họ và tên: ${name}`,
-    `Số điện thoại: ${phone}`,
-    `Email: ${email || "Không cung cấp"}`,
-    `Nhu cầu: ${need}`,
-    `Tệp cần đính kèm: ${fileName}`,
-    "",
-    "Nội dung cần trao đổi:",
-    messageInput.value.trim() || "Chưa cung cấp"
-  ].join("\n");
-  const mailtoLink = `mailto:aplusscholarr@gmail.com?subject=${encodeURIComponent(`Yêu cầu tư vấn từ ${name}`)}&body=${encodeURIComponent(emailBody)}`;
+  const briefFile = briefFileInput.files[0];
+  if (briefFile && (!allowedBriefExtensions.test(briefFile.name) || briefFile.size > maximumBriefFileSize)) {
+    status.textContent = briefFile.size > maximumBriefFileSize
+      ? "Tệp vượt quá 3 MB. Vui lòng chọn tệp nhỏ hơn."
+      : "Định dạng tệp chưa được hỗ trợ. Vui lòng chọn PDF, DOC hoặc DOCX.";
+    status.classList.add("is-error");
+    return;
+  }
 
-  status.classList.remove("is-error");
-  status.textContent = "Nội dung đã sẵn sàng. Ứng dụng email sẽ mở để bạn kiểm tra, đính kèm tệp nếu có và nhấn Gửi.";
-  emailFallback.href = mailtoLink;
-  emailFallback.hidden = false;
+  status.classList.remove("is-error", "is-success");
+  status.textContent = "Đang gửi yêu cầu bảo mật...";
+  emailFallback.hidden = true;
   submitButton.disabled = true;
-  submitButton.textContent = "Đang mở email...";
-  window.setTimeout(() => {
-    window.location.href = mailtoLink;
+  submitButton.textContent = "Đang gửi...";
+
+  try {
+    const fileContent = briefFile ? await readFileAsBase64(briefFile) : "";
+    const response = await fetch(form.action, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        name,
+        phone,
+        email,
+        need,
+        message: messageInput.value.trim(),
+        website: form.elements.website.value,
+        file: briefFile ? { name: briefFile.name, type: briefFile.type, size: briefFile.size, content: fileContent } : null
+      })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.message || "Hệ thống chưa thể tiếp nhận yêu cầu.");
+
+    form.reset();
+    setPhoneError();
+    status.classList.add("is-success");
+    status.textContent = `Đã tiếp nhận yêu cầu ${result.requestId}. Aplus Scholar dự kiến phản hồi trong vòng 1 ngày làm việc.`;
+  } catch (error) {
+    status.classList.add("is-error");
+    status.textContent = error.message || "Chưa thể gửi yêu cầu. Vui lòng thử lại sau.";
+    emailFallback.hidden = false;
+  } finally {
     submitButton.disabled = false;
     submitButton.textContent = "Gửi yêu cầu tư vấn";
-  }, 350);
+  }
 });
