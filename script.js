@@ -224,44 +224,6 @@ async function sendConsultationRequest(action, payload) {
   return result;
 }
 
-const quickForm = document.getElementById("quick-consultation-form");
-if (quickForm) {
-  const quickStatus = document.getElementById("quick-form-status");
-  const quickSubmit = quickForm.querySelector("button[type='submit']");
-  const quickFallback = quickForm.querySelector(".quick-form-fallback");
-  quickForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const name = quickForm.elements.name.value.trim();
-    const phone = quickForm.elements.phone.value.replace(/\s/g, "");
-    const need = quickForm.elements.need.value;
-    const consent = quickForm.elements.consent.checked;
-    quickStatus.classList.remove("is-error", "is-success");
-    if (!name || !/^0\d{9}$/.test(phone) || !need || !consent) {
-      quickStatus.textContent = "Vui lòng nhập họ tên, số điện thoại 10 chữ số, nhu cầu và xác nhận đồng ý.";
-      quickStatus.classList.add("is-error");
-      return;
-    }
-
-    quickSubmit.disabled = true;
-    quickSubmit.textContent = "Đang gửi...";
-    quickStatus.textContent = "Đang gửi yêu cầu bảo mật...";
-    quickFallback.hidden = true;
-    try {
-      const result = await sendConsultationRequest(quickForm.action, { name, phone, need, email: "", message: "Yêu cầu tư vấn nhanh từ đầu trang", website: "", file: null });
-      quickForm.reset();
-      quickStatus.classList.add("is-success");
-      quickStatus.textContent = `Đã tiếp nhận yêu cầu ${result.requestId}. Aplus Scholar dự kiến phản hồi trong vòng 1 ngày làm việc.`;
-    } catch (error) {
-      quickStatus.classList.add("is-error");
-      quickStatus.textContent = error.message || "Chưa thể gửi yêu cầu. Vui lòng thử lại sau.";
-      quickFallback.hidden = false;
-    } finally {
-      quickSubmit.disabled = false;
-      quickSubmit.textContent = "Nhận tư vấn";
-    }
-  });
-}
-
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = form.elements.name.value.trim();
