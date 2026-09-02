@@ -338,3 +338,23 @@
   .home-disclosure>summary strong{font-size:12px;line-height:1.45}
   .case-note-grid dl div{grid-template-columns:1fr;gap:4px}
 }
+
+/* Academic photography for the primary case study. */
+.case-note-grid article:first-child{position:relative;isolation:isolate;overflow:hidden;padding-top:clamp(285px,29vw,350px);background:#071d49}
+.case-study-visual{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center top}
+.case-note-grid article:first-child::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(4,16,42,.04) 0%,rgba(5,22,57,.2) 38%,rgba(5,22,57,.92) 67%,#071b45 100%);pointer-events:none}
+.case-note-grid article:first-child>span,.case-note-grid article:first-child>h3,.case-note-grid article:first-child>dl{position:relative;z-index:2}
+
+@media(max-width:560px){
+  .case-note-grid article:first-child{padding-top:260px}
+}
+
+/* Keep the primary actions clear of the vertical research marker. */
+@media(min-width:1100px){
+  .hero-actions{margin-left:clamp(44px,4.5vw,68px)}
+}
+
+@media(min-width:851px) and (max-width:1099px){
+  .hero-actions{align-items:flex-start;flex-direction:column;gap:18px;margin-left:32px}
+  .hero-actions .button{flex:none;white-space:nowrap}
+}
