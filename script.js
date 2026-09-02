@@ -1,67 +1,33 @@
-const serviceData = {
-  academic: {
-    index: "01",
-    kicker: "Hỗ trợ học thuật",
-    title: "Từ đề cương đến bài nghiên cứu có cấu trúc.",
-    description: "Làm rõ yêu cầu, phương pháp và cách trình bày để bạn tự tin phát triển bài làm.",
-    items: ["Phương pháp nghiên cứu khoa học", "Nghiên cứu khoa học", "Khóa luận và chuyên đề tốt nghiệp", "Báo cáo thực tập, assignment, đề cương, tiểu luận"]
-  },
-  data: {
-    index: "02",
-    kicker: "Dữ liệu nghiên cứu",
-    title: "Chuẩn bị nguồn dữ liệu có thể sử dụng được.",
-    description: "Hỗ trợ xây dựng khảo sát, tổng hợp dữ liệu thứ cấp và làm sạch dữ liệu trước khi phân tích.",
-    items: ["Thu thập dữ liệu sơ cấp bằng form khảo sát", "Tổng hợp dữ liệu tài chính", "Tổng hợp dữ liệu phi tài chính", "Làm sạch và chuẩn hóa số liệu"]
-  },
-  analysis: {
-    index: "03",
-    kicker: "Phân tích số liệu",
-    title: "Chọn công cụ phù hợp với câu hỏi nghiên cứu.",
-    description: "Tư vấn quy trình phân tích, đọc kết quả và cách diễn giải các chỉ số trong bài nghiên cứu.",
-    items: ["SmartPLS", "SPSS", "STATA", "AMOS", "EViews"]
-  },
-  integrity: {
-    index: "04",
-    kicker: "Kiểm tra",
-    title: "Kiểm tra kỹ trước khi nộp bài.",
-    description: "Hỗ trợ kiểm tra mức độ tương đồng và nhận diện dấu hiệu AI để bạn chủ động rà soát nội dung.",
-    items: ["Kiểm tra đạo văn Turnitin", "Kiểm tra AI Turnitin", "Rà soát trích dẫn và nguồn tham khảo", "Gợi ý chỉnh sửa để nội dung rõ ràng hơn"]
-  },
-  creative: {
-    index: "05",
-    kicker: "Trình bày và dịch vụ số",
-    title: "Truyền đạt ý tưởng bằng một trải nghiệm thuyết phục.",
-    description: "Hoàn thiện phần trình bày để công việc học thuật, nghiên cứu hoặc dự án của bạn dễ theo dõi và chuyên nghiệp.",
-    items: ["Thiết kế slide và pitch deck", "Design và thiết kế website", "Dịch thuật", "Hỗ trợ coding theo yêu cầu"]
-  }
-};
+const tabs = [...document.querySelectorAll(".service-tab")];
+const panels = [...document.querySelectorAll(".service-feature[role='tabpanel']")];
 
-const panel = {
-  index: document.getElementById("service-index"),
-  kicker: document.getElementById("service-kicker"),
-  title: document.getElementById("service-title"),
-  description: document.getElementById("service-description"),
-  list: document.getElementById("service-list")
-};
+function activateService(tab, focusPanel = false) {
+  const panelId = tab.getAttribute("aria-controls");
+  tabs.forEach((item) => {
+    const isActive = item === tab;
+    item.classList.toggle("is-active", isActive);
+    item.setAttribute("aria-selected", String(isActive));
+    item.tabIndex = isActive ? 0 : -1;
+  });
+  panels.forEach((panel) => {
+    panel.hidden = panel.id !== panelId;
+  });
+  if (focusPanel) document.getElementById(panelId).focus();
+}
 
-document.querySelectorAll(".service-tab").forEach((tab) => {
-  tab.addEventListener("click", () => {
-    const service = serviceData[tab.dataset.service];
-    document.querySelectorAll(".service-tab").forEach((item) => {
-      item.classList.remove("is-active");
-      item.setAttribute("aria-selected", "false");
-    });
-    tab.classList.add("is-active");
-    tab.setAttribute("aria-selected", "true");
-    panel.index.textContent = service.index;
-    panel.kicker.textContent = service.kicker;
-    panel.title.textContent = service.title;
-    panel.description.textContent = service.description;
-    panel.list.replaceChildren(...service.items.map((item) => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      return li;
-    }));
+tabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => activateService(tab));
+  tab.addEventListener("keydown", (event) => {
+    const keys = ["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    let nextIndex = index;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = tabs.length - 1;
+    tabs[nextIndex].focus();
+    activateService(tabs[nextIndex]);
   });
 });
 
@@ -78,17 +44,45 @@ nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () =>
 
 const form = document.getElementById("consultation-form");
 const status = document.getElementById("form-status");
+const phoneInput = document.getElementById("phone");
+const phoneError = document.getElementById("phone-error");
+const emailInput = document.getElementById("email");
+const submitButton = form.querySelector("button[type='submit']");
+
+function setPhoneError(message = "") {
+  phoneError.textContent = message;
+  phoneInput.setAttribute("aria-invalid", String(Boolean(message)));
+}
+
+phoneInput.addEventListener("input", () => {
+  const normalized = phoneInput.value.replace(/\s/g, "");
+  if (!normalized || /^0\d{9}$/.test(normalized)) setPhoneError();
+});
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const name = form.elements.name.value.trim();
-  const phone = form.elements.phone.value.replace(/\s/g, "");
+  const phone = phoneInput.value.replace(/\s/g, "");
+  const email = emailInput.value.trim();
   const need = form.elements.need.value;
-  if (!name || !/^0\d{9}$/.test(phone) || !need) {
-    status.textContent = "Vui lòng điền họ tên, số điện thoại 10 chữ số và nhóm dịch vụ.";
+  const consent = form.elements.consent.checked;
+  const validPhone = /^0\d{9}$/.test(phone);
+  const validEmail = !email || emailInput.validity.valid;
+
+  setPhoneError(validPhone ? "" : "Nhập số điện thoại Việt Nam gồm 10 chữ số.");
+  if (!name || !need || !consent || !validPhone || !validEmail) {
+    status.textContent = "Vui lòng hoàn thiện các thông tin bắt buộc trước khi tiếp tục.";
     status.classList.add("is-error");
     return;
   }
-  status.textContent = "Aplus Scholar đã ghi nhận yêu cầu. Chúng tôi sẽ liên hệ với bạn sớm.";
+
   status.classList.remove("is-error");
-  form.reset();
+  status.textContent = "Đang kiểm tra thông tin yêu cầu...";
+  submitButton.disabled = true;
+  submitButton.textContent = "Đang kiểm tra...";
+  window.setTimeout(() => {
+    status.textContent = "Thông tin đã hợp lệ. Hãy nhắn Zalo hoặc gọi 0915 489 902 để Aplus Scholar tiếp nhận yêu cầu và tệp đính kèm.";
+    submitButton.disabled = false;
+    submitButton.textContent = "Kiểm tra yêu cầu";
+  }, 450);
 });

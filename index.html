@@ -5,7 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Aplus Scholar cung cấp hỗ trợ học thuật, phương pháp nghiên cứu và phân tích dữ liệu cho người học." />
     <title>Aplus Scholar | Đồng hành cùng hành trình học thuật</title>
+    <link rel="canonical" href="https://aplus-scholar.vercel.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:site_name" content="Aplus Scholar" />
+    <meta property="og:title" content="Aplus Scholar | Đồng hành cùng hành trình học thuật" />
+    <meta property="og:description" content="Hỗ trợ phương pháp, dữ liệu và cách trình bày nghiên cứu có trách nhiệm." />
+    <meta property="og:url" content="https://aplus-scholar.vercel.app/" />
+    <meta property="og:image" content="https://aplus-scholar.vercel.app/assets/hero-library.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aplus Scholar | Đồng hành cùng hành trình học thuật" />
+    <meta name="twitter:description" content="Hỗ trợ phương pháp, dữ liệu và cách trình bày nghiên cứu có trách nhiệm." />
+    <meta name="twitter:image" content="https://aplus-scholar.vercel.app/assets/hero-library.png" />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Aplus Scholar",
+        "url": "https://aplus-scholar.vercel.app/",
+        "telephone": "+84915489902",
+        "description": "Hỗ trợ phương pháp nghiên cứu, xử lý dữ liệu, phân tích số liệu và trình bày học thuật có trách nhiệm.",
+        "areaServed": "VN",
+        "availableLanguage": ["vi"]
+      }
+    </script>
     <style>
       .wordmark { display: block; width: 100%; height: auto; overflow: visible; }
       .hero-media-caption { position: absolute; z-index: 3; isolation: isolate; display: block; width: 174px; min-height: 0; left: 20px; bottom: 42px; padding: 8px 10px; border: 1px solid rgba(230, 240, 255, .54); border-radius: 12px; background: radial-gradient(circle at 20% 0%, rgba(255,255,255,.34), transparent 48%), linear-gradient(118deg, rgba(255,255,255,.20), rgba(255,255,255,.025) 46%, rgba(149,187,255,.10)), rgba(4, 20, 54, .22); box-shadow: inset 0 1px 0 rgba(255,255,255,.52), inset 0 -1px 0 rgba(171,201,255,.16), inset 1px 0 0 rgba(255,255,255,.08), 0 20px 40px rgba(0,0,0,.2); -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.08); backdrop-filter: blur(28px) saturate(190%) brightness(1.08); }
@@ -94,10 +118,10 @@
           <div class="hero-copy">
             <p class="eyebrow">Aplus Scholar</p>
             <h1 id="hero-title">Học sâu hơn.<br />Đi xa hơn.</h1>
-            <p class="hero-intro">Aplus Scholar giúp bạn làm chủ phương pháp, dữ liệu và cách trình bày một nghiên cứu thuyết phục.</p>
+            <p class="hero-intro">Đồng hành để bạn làm chủ phương pháp, dữ liệu và cách trình bày nghiên cứu một cách có trách nhiệm.</p>
             <div class="hero-actions">
               <a class="button button-primary" href="#contact">Nhận tư vấn</a>
-              <a class="text-link" href="#services">Khám phá dịch vụ <span aria-hidden="true">↘</span></a>
+              <a class="text-link" href="#services">Xem nhóm hỗ trợ <span aria-hidden="true">↘</span></a>
             </div>
           </div>
           <div class="hero-media">
@@ -111,8 +135,8 @@
         </section>
 
         <section class="principles" aria-label="Cam kết của Aplus Scholar">
-          <p>Định hướng rõ ràng</p>
-          <p>Quy trình minh bạch</p>
+          <p>Trao đổi phạm vi trước khi bắt đầu</p>
+          <p>Quy trình và báo giá minh bạch</p>
           <p>Tôn trọng chuẩn mực học thuật</p>
         </section>
 
@@ -139,26 +163,48 @@
           </div>
           <div class="service-explorer">
             <div class="service-tabs" role="tablist" aria-label="Nhóm dịch vụ">
-              <button class="service-tab is-active" type="button" role="tab" aria-selected="true" data-service="academic">Học thuật</button>
-              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="data">Dữ liệu</button>
-              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="analysis">Phân tích</button>
-              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="integrity">Kiểm tra</button>
-              <button class="service-tab" type="button" role="tab" aria-selected="false" data-service="creative">Trình bày</button>
+              <button class="service-tab is-active" id="academic-tab" type="button" role="tab" aria-selected="true" aria-controls="academic-panel" tabindex="0">Học thuật</button>
+              <button class="service-tab" id="data-tab" type="button" role="tab" aria-selected="false" aria-controls="data-panel" tabindex="-1">Dữ liệu</button>
+              <button class="service-tab" id="analysis-tab" type="button" role="tab" aria-selected="false" aria-controls="analysis-panel" tabindex="-1">Phân tích</button>
+              <button class="service-tab" id="integrity-tab" type="button" role="tab" aria-selected="false" aria-controls="integrity-panel" tabindex="-1">Kiểm tra</button>
+              <button class="service-tab" id="creative-tab" type="button" role="tab" aria-selected="false" aria-controls="creative-panel" tabindex="-1">Trình bày</button>
             </div>
-            <article class="service-feature" id="service-panel" role="tabpanel">
-              <div class="service-index" id="service-index">01</div>
+            <div class="service-panels">
+              <article class="service-feature" id="academic-panel" role="tabpanel" aria-labelledby="academic-tab" tabindex="0">
+                <div class="service-index">01</div>
               <div class="service-content">
-                <p class="service-kicker" id="service-kicker">Hỗ trợ học thuật</p>
-                <h3 id="service-title">Từ đề cương đến bài nghiên cứu có cấu trúc.</h3>
-                <p id="service-description">Làm rõ yêu cầu, phương pháp và cách trình bày để bạn tự tin phát triển bài làm.</p>
+                <p class="service-kicker">Hỗ trợ học thuật</p>
+                <h3>Từ đề cương đến bài nghiên cứu có cấu trúc.</h3>
+                <p>Làm rõ yêu cầu, phương pháp và cách trình bày để bạn tự tin phát triển bài làm.</p>
               </div>
-              <ul class="service-list" id="service-list">
+              <ul class="service-list">
                 <li>Phương pháp nghiên cứu khoa học</li>
                 <li>Nghiên cứu khoa học</li>
                 <li>Khóa luận và chuyên đề tốt nghiệp</li>
                 <li>Báo cáo thực tập, assignment, đề cương, tiểu luận</li>
               </ul>
-            </article>
+              </article>
+              <article class="service-feature" id="data-panel" role="tabpanel" aria-labelledby="data-tab" tabindex="0" hidden>
+                <div class="service-index">02</div>
+                <div class="service-content"><p class="service-kicker">Dữ liệu nghiên cứu</p><h3>Chuẩn bị nguồn dữ liệu có thể sử dụng được.</h3><p>Hỗ trợ xây dựng khảo sát, tổng hợp dữ liệu thứ cấp và làm sạch dữ liệu trước khi phân tích.</p></div>
+                <ul class="service-list"><li>Thu thập dữ liệu sơ cấp bằng form khảo sát</li><li>Tổng hợp dữ liệu tài chính</li><li>Tổng hợp dữ liệu phi tài chính</li><li>Làm sạch và chuẩn hóa số liệu</li></ul>
+              </article>
+              <article class="service-feature" id="analysis-panel" role="tabpanel" aria-labelledby="analysis-tab" tabindex="0" hidden>
+                <div class="service-index">03</div>
+                <div class="service-content"><p class="service-kicker">Phân tích số liệu</p><h3>Chọn công cụ phù hợp với câu hỏi nghiên cứu.</h3><p>Tư vấn quy trình phân tích, đọc kết quả và cách diễn giải các chỉ số trong bài nghiên cứu.</p></div>
+                <ul class="service-list"><li>SmartPLS</li><li>SPSS</li><li>STATA</li><li>AMOS</li><li>EViews</li></ul>
+              </article>
+              <article class="service-feature" id="integrity-panel" role="tabpanel" aria-labelledby="integrity-tab" tabindex="0" hidden>
+                <div class="service-index">04</div>
+                <div class="service-content"><p class="service-kicker">Kiểm tra</p><h3>Kiểm tra kỹ trước khi nộp bài.</h3><p>Hỗ trợ kiểm tra mức độ tương đồng, trích dẫn và nguồn tham khảo để bạn chủ động rà soát nội dung.</p></div>
+                <ul class="service-list"><li>Kiểm tra đạo văn Turnitin</li><li>Rà soát trích dẫn và nguồn tham khảo</li><li>Kiểm tra tính nhất quán trong nội dung</li><li>Gợi ý chỉnh sửa để nội dung rõ ràng hơn</li></ul>
+              </article>
+              <article class="service-feature" id="creative-panel" role="tabpanel" aria-labelledby="creative-tab" tabindex="0" hidden>
+                <div class="service-index">05</div>
+                <div class="service-content"><p class="service-kicker">Trình bày và dịch vụ số</p><h3>Truyền đạt ý tưởng bằng trải nghiệm thuyết phục.</h3><p>Hoàn thiện phần trình bày để dự án học thuật, nghiên cứu hoặc sản phẩm số dễ theo dõi và chuyên nghiệp.</p></div>
+                <ul class="service-list"><li>Thiết kế slide và pitch deck</li><li>Thiết kế website</li><li>Dịch thuật</li><li>Hỗ trợ coding theo yêu cầu</li></ul>
+              </article>
+            </div>
           </div>
           <p class="service-note">Mỗi yêu cầu được trao đổi riêng để xác định phạm vi, tiến độ và phương án phù hợp.</p>
         </section>
@@ -227,8 +273,13 @@
             <div class="form-field">
               <label for="phone">Số điện thoại</label>
               <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Nhập số điện thoại" required />
+              <p class="field-error" id="phone-error" aria-live="polite"></p>
             </div>
             <div class="form-field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="Nhập email để nhận phản hồi" />
+            </div>
+            <div class="form-field form-field-wide">
               <label for="need">Nhu cầu hỗ trợ</label>
               <select id="need" name="need" required>
                 <option value="">Chọn nhóm dịch vụ</option>
@@ -239,11 +290,17 @@
                 <option>Trình bày và dịch vụ số</option>
               </select>
             </div>
-            <div class="form-field">
+            <div class="form-field form-field-wide">
               <label for="message">Nội dung cần trao đổi</label>
               <textarea id="message" name="message" rows="3" placeholder="Môn học, chủ đề hoặc mốc thời gian của bạn"></textarea>
             </div>
-            <button class="button button-primary form-submit" type="submit">Gửi yêu cầu</button>
+            <div class="form-field form-field-wide form-field-file">
+              <label for="brief-file">Tệp đề bài hoặc yêu cầu</label>
+              <input id="brief-file" name="brief-file" type="file" accept=".pdf,.doc,.docx" aria-describedby="file-help" />
+              <p class="form-help" id="file-help">Không bắt buộc. Chấp nhận PDF, DOC và DOCX.</p>
+            </div>
+            <label class="consent-field"><input id="consent" name="consent" type="checkbox" required /> <span>Tôi đồng ý để Aplus Scholar sử dụng thông tin này nhằm phản hồi yêu cầu tư vấn.</span></label>
+            <button class="button button-primary form-submit" type="submit">Kiểm tra yêu cầu</button>
             <p class="form-status" id="form-status" aria-live="polite"></p>
           </form>
         </section>
@@ -267,6 +324,10 @@
         <p class="copyright">© 2026 Aplus Scholar. All rights reserved.</p>
       </footer>
     </div>
-    <script src="script.js?v=20260901"></script>
+    <div class="mobile-contact-bar" aria-label="Liên hệ nhanh">
+      <a href="tel:0915489902"><img src="assets/phone-call.svg" alt="" /> Gọi tư vấn</a>
+      <a href="https://zalo.me/0915489902" target="_blank" rel="noopener noreferrer"><img src="assets/zalo.svg" alt="" /> Nhắn Zalo</a>
+    </div>
+    <script src="script.js?v=20260902"></script>
   </body>
 </html>
