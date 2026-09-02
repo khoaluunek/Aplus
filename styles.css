@@ -153,3 +153,61 @@
 @media(prefers-reduced-motion:reduce){.journey-track{scroll-behavior:auto}.journey-card,.journey-control{transition:none}}
 @media(max-width:950px){.journey-section{padding-right:max(20px,calc((100% - 700px)/2));padding-left:max(20px,calc((100% - 700px)/2))}.journey-track{grid-auto-columns:calc((100% - 18px)/2)}.journey-card{min-height:326px}}
 @media(max-width:650px){.journey-section{padding:88px 16px 96px}.journey-header{grid-template-columns:1fr;gap:25px;margin-bottom:32px;padding:0 4px}.journey-header .eyebrow{font-size:14px}.journey-header h2{font-size:clamp(2.65rem,12vw,3.6rem)}.journey-lede{font-size:16px}.journey-controls{padding:0}.journey-control{width:48px;height:48px}.journey-carousel{padding:18px 14px 15px;border-radius:16px}.journey-track{grid-auto-columns:88%;gap:12px;padding-top:8px}.journey-card{min-height:330px;padding:24px 22px 27px}.journey-card::before{left:22px}.journey-card-meta{margin-bottom:42px}.journey-card h3{font-size:22px}.journey-card>p{font-size:15px}.journey-current{right:22px}.journey-footer{align-items:flex-start;flex-direction:column;gap:6px;font-size:11px}}
+
+/* Feedback-led service transparency, shorter page rhythm and accessible form details. */
+.eyebrow{font-size:13px;color:#a9c4ff}
+.section-heading-copy{max-width:680px;margin:0;color:#c1cee5;font-size:17px;line-height:1.65}
+.services-section{padding-top:104px;padding-bottom:108px}
+.service-explorer{margin-top:42px}
+.service-tab{min-height:48px}
+.service-feature{min-height:0;align-items:start}
+.service-facts{grid-column:2/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:8px 0 0}
+.service-facts div{min-width:0;padding:17px 18px;border:1px solid rgba(207,224,255,.26);border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(135,177,255,.035)),rgba(7,29,73,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.13)}
+.service-facts dt{color:#9fbdff;font-size:13px;font-weight:820;letter-spacing:.04em;text-transform:uppercase}
+.service-facts dd{margin:7px 0 0;color:#dbe6fb;font-size:14px;line-height:1.5}
+.service-ethics-note{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;margin:28px 0 0 281px;padding:20px 22px;border-top:1px solid rgba(205,222,255,.28);border-bottom:1px solid rgba(205,222,255,.28)}
+.service-ethics-note p{margin:0;color:#becce5;font-size:14px;line-height:1.62}
+.service-ethics-note strong{color:#f2f6ff}
+.service-cta{display:flex;justify-content:space-between;align-items:center;gap:28px;margin:28px 0 0 281px;padding:22px 24px;border:1px solid rgba(210,226,255,.38);border-radius:14px;background:radial-gradient(circle at 14% 0%,rgba(255,255,255,.16),transparent 45%),rgba(8,32,78,.54);box-shadow:inset 0 1px 0 rgba(255,255,255,.19);-webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%)}
+.service-cta>div{display:grid;gap:5px}
+.service-cta strong{color:#f5f8ff;font-size:19px}
+.service-cta span{color:#b9c9e5;font-size:14px;line-height:1.5}
+.service-cta .button{flex:0 0 auto}
+.policy-content a,.form-privacy-link a{color:#e2ebff;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.form-privacy-link{grid-column:1/-1;margin:-10px 0 0 29px;color:#aebfdb;font-size:12px;line-height:1.5}
+.response-note{grid-column:1/-1;margin:-2px 0 0;color:#b8c8e4;font-size:13px;line-height:1.5}
+.form-email-fallback{grid-column:1/-1;color:#dce8ff;font-size:13px;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.form-email-fallback[hidden]{display:none}
+.contact-channel .contact-channel-label{font-size:11px}
+.intro-section{padding-top:104px;padding-bottom:110px}
+.journey-section{padding-top:96px;padding-bottom:102px}
+.journey-card{min-height:292px}
+.journey-card-meta{margin-bottom:38px}
+.why-section{padding-top:100px;padding-bottom:100px}
+.process-section{padding-top:104px;padding-bottom:104px}
+
+@media(max-width:850px){
+  .main-nav a{display:flex;align-items:center;min-height:44px}
+  .service-tabs{scrollbar-width:none}
+  .service-tabs::-webkit-scrollbar{display:none}
+  .service-facts{grid-column:1/-1}
+  .service-ethics-note,.service-cta{margin-left:0}
+  .intro-section{padding-top:82px;padding-bottom:88px}
+  .why-section{padding-top:82px;padding-bottom:82px}
+  .process-section{padding-top:86px;padding-bottom:86px}
+}
+@media(max-width:700px){
+  .service-facts{grid-template-columns:1fr}
+  .service-ethics-note{grid-template-columns:1fr}
+  .service-cta{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:650px){
+  .journey-section{padding-top:78px;padding-bottom:82px}
+  .journey-card{min-height:310px}
+}
+@media(max-width:560px){
+  .eyebrow{font-size:12px}
+  .service-tab{min-height:44px}
+  .form-privacy-link,.response-note,.form-email-fallback{grid-column:auto}
+  .form-privacy-link{margin-left:29px}
+}

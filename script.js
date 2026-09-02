@@ -51,6 +51,14 @@ policyItems.forEach((item) => {
   });
 });
 
+const privacyPolicy = document.getElementById("privacy-policy");
+const revealPrivacyPolicy = () => {
+  if (!privacyPolicy) return;
+  privacyPolicy.open = true;
+};
+document.querySelectorAll("a[href='#privacy-policy']").forEach((link) => link.addEventListener("click", revealPrivacyPolicy));
+if (window.location.hash === "#privacy-policy") revealPrivacyPolicy();
+
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".main-nav");
 menuToggle.addEventListener("click", () => {
@@ -146,6 +154,9 @@ const phoneInput = document.getElementById("phone");
 const phoneError = document.getElementById("phone-error");
 const emailInput = document.getElementById("email");
 const submitButton = form.querySelector("button[type='submit']");
+const messageInput = document.getElementById("message");
+const briefFileInput = document.getElementById("brief-file");
+const emailFallback = document.getElementById("form-email-fallback");
 
 function setPhoneError(message = "") {
   phoneError.textContent = message;
@@ -174,13 +185,28 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
+  const fileName = briefFileInput.files[0]?.name || "Không có";
+  const emailBody = [
+    `Họ và tên: ${name}`,
+    `Số điện thoại: ${phone}`,
+    `Email: ${email || "Không cung cấp"}`,
+    `Nhu cầu: ${need}`,
+    `Tệp cần đính kèm: ${fileName}`,
+    "",
+    "Nội dung cần trao đổi:",
+    messageInput.value.trim() || "Chưa cung cấp"
+  ].join("\n");
+  const mailtoLink = `mailto:aplusscholarr@gmail.com?subject=${encodeURIComponent(`Yêu cầu tư vấn từ ${name}`)}&body=${encodeURIComponent(emailBody)}`;
+
   status.classList.remove("is-error");
-  status.textContent = "Đang kiểm tra thông tin yêu cầu...";
+  status.textContent = "Nội dung đã sẵn sàng. Ứng dụng email sẽ mở để bạn kiểm tra, đính kèm tệp nếu có và nhấn Gửi.";
+  emailFallback.href = mailtoLink;
+  emailFallback.hidden = false;
   submitButton.disabled = true;
-  submitButton.textContent = "Đang kiểm tra...";
+  submitButton.textContent = "Đang mở email...";
   window.setTimeout(() => {
-    status.textContent = "Thông tin đã hợp lệ. Hãy nhắn Zalo hoặc gọi 0915 489 902 để Aplus Scholar tiếp nhận yêu cầu và tệp đính kèm.";
+    window.location.href = mailtoLink;
     submitButton.disabled = false;
-    submitButton.textContent = "Kiểm tra yêu cầu";
-  }, 450);
+    submitButton.textContent = "Gửi yêu cầu tư vấn";
+  }, 350);
 });
