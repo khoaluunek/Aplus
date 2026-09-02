@@ -41,6 +41,16 @@ reasonItems.forEach((item) => {
   });
 });
 
+const policyItems = [...document.querySelectorAll(".policy-library details")];
+policyItems.forEach((item) => {
+  item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    policyItems.forEach((otherItem) => {
+      if (otherItem !== item) otherItem.open = false;
+    });
+  });
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".main-nav");
 menuToggle.addEventListener("click", () => {
