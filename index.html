@@ -17,7 +17,7 @@
     <meta name="twitter:title" content="Aplus Scholar | Đồng hành cùng hành trình học thuật" />
     <meta name="twitter:description" content="Hỗ trợ phương pháp, dữ liệu và cách trình bày nghiên cứu có trách nhiệm." />
     <meta name="twitter:image" content="https://aplus-scholar.vercel.app/assets/hero-library.png" />
-    <link rel="stylesheet" href="styles.css?v=20260902c" />
+    <link rel="stylesheet" href="styles.css?v=20260902d" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -136,10 +136,29 @@
           </div>
         </section>
 
-        <section class="principles" aria-label="Cam kết của Aplus Scholar">
-          <p>Phạm vi hỗ trợ rõ ràng</p>
-          <p>Quy trình và báo giá minh bạch</p>
-          <p>Tôn trọng chuẩn mực học thuật</p>
+        <section class="quick-consult-section" aria-labelledby="quick-consult-title">
+          <div class="quick-consult-copy">
+            <p class="eyebrow">Tư vấn nhanh</p>
+            <h2 id="quick-consult-title">Cho Aplus biết bạn đang cần hỗ trợ gì.</h2>
+            <p>Để lại thông tin cơ bản hoặc trao đổi ngay qua điện thoại và Zalo. Phản hồi dự kiến trong vòng 1 ngày làm việc.</p>
+            <div class="quick-contact-links"><a href="tel:0915489902">Gọi 0915 489 902</a><a href="https://zalo.me/0915489902" target="_blank" rel="noopener noreferrer">Nhắn Zalo</a></div>
+          </div>
+          <form class="quick-consult-form" id="quick-consultation-form" action="/api/consultation" method="post" novalidate>
+            <div><label for="quick-name">Họ và tên</label><input id="quick-name" name="name" type="text" autocomplete="name" placeholder="Nhập họ và tên" required /></div>
+            <div><label for="quick-phone">Số điện thoại</label><input id="quick-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="0915 489 902" required /></div>
+            <div><label for="quick-need">Nhu cầu</label><select id="quick-need" name="need" required><option value="">Chọn nhóm hỗ trợ</option><option>Hỗ trợ học thuật</option><option>Thu thập và xử lý dữ liệu</option><option>Phân tích số liệu</option><option>Kiểm tra Turnitin</option><option>Dịch vụ số phụ trợ</option></select></div>
+            <label class="quick-consent"><input name="consent" type="checkbox" required /><span>Tôi đồng ý để Aplus Scholar sử dụng thông tin nhằm phản hồi yêu cầu. <a href="#privacy-policy">Xem chính sách dữ liệu</a>.</span></label>
+            <button class="button button-primary" type="submit">Nhận tư vấn</button>
+            <p class="quick-form-status" id="quick-form-status" role="status" aria-live="polite"></p>
+            <a class="quick-form-fallback" href="mailto:aplusscholarr@gmail.com" hidden>Gửi qua email dự phòng</a>
+          </form>
+        </section>
+
+        <section class="trust-proof" aria-label="Bằng chứng năng lực Aplus Scholar">
+          <article><strong>Est. 2022</strong><span>Nền tảng kinh nghiệm được duy trì liên tục</span></article>
+          <article><strong>4+ năm</strong><span>Đồng hành cùng các nhu cầu học thuật và nghiên cứu</span></article>
+          <article><strong>4 nhóm chính</strong><span>Học thuật, dữ liệu, phân tích và kiểm tra</span></article>
+          <article><strong>1 ngày làm việc</strong><span>Thời gian phản hồi tư vấn dự kiến</span></article>
         </section>
 
         <section class="services-section" id="services" aria-labelledby="services-title">
@@ -197,7 +216,7 @@
           </div>
           <div class="service-cta">
             <div><strong>Chưa chắc nhóm dịch vụ nào phù hợp?</strong><span>Gửi đề bài để được xác định phạm vi và báo giá trước khi bắt đầu.</span></div>
-            <a class="button button-primary" href="#contact">Nhận tư vấn theo nhu cầu</a>
+            <a class="button button-primary" href="#contact">Nhận tư vấn</a>
           </div>
         </section>
 
@@ -216,20 +235,22 @@
             <div class="support-offers" aria-label="Dịch vụ bổ trợ">
               <article><span>01</span><div><h3>Slide và pitch deck</h3><p>Từ 200.000đ, thời gian mẫu 1 đến 4 ngày; phụ thuộc số trang, mức độ biên tập và deadline.</p></div></article>
               <article><span>02</span><div><h3>Dịch thuật học thuật</h3><p>Báo giá theo ngôn ngữ, số từ và yêu cầu hiệu đính chuyên ngành.</p></div></article>
-              <article><span>03</span><div><h3>Website và hỗ trợ coding</h3><p>Báo giá theo tính năng, nền tảng triển khai và phạm vi bàn giao mã nguồn.</p></div></article>
+              <article class="digital-support-offer"><span>03</span><div><p class="support-label">Dịch vụ số phụ trợ</p><h3>Website và hỗ trợ coding</h3><p>Báo giá riêng theo tính năng, nền tảng triển khai và phạm vi bàn giao mã nguồn.</p></div></article>
             </div>
             <div class="case-notes">
-              <div class="case-notes-heading"><p class="eyebrow">Tình huống tiêu biểu</p><p>Các ví dụ dưới đây mô phỏng phạm vi thường gặp và không sử dụng dữ liệu nhận diện của khách hàng.</p></div>
+              <div class="case-notes-heading"><p class="eyebrow">Hồ sơ năng lực</p><p>Các tình huống dưới đây cho thấy quy trình, đầu ra và vai trò chuyên môn theo từng dạng yêu cầu. Không sử dụng dữ liệu nhận diện hoặc điểm số khách hàng.</p></div>
               <div class="case-note-grid">
-                <article><span>Khóa luận kinh tế</span><h3>Rà soát mô hình và chuẩn hóa dữ liệu</h3><p>Đầu ra mẫu: checklist phương pháp, tệp dữ liệu sạch và ghi chú cách đọc kết quả.</p></article>
-                <article><span>Nghiên cứu định lượng</span><h3>Phân tích SPSS có giải thích</h3><p>Đầu ra mẫu: bảng kết quả, diễn giải chỉ số và các điểm người học cần tự kiểm tra.</p></article>
-                <article><span>Báo cáo bảo vệ</span><h3>Chuyển nội dung thành mạch trình bày</h3><p>Đầu ra mẫu: bộ slide, cấu trúc thuyết trình và checklist trước buổi bảo vệ.</p></article>
+                <article><span>Khóa luận kinh tế</span><h3>Rà soát mô hình và chuẩn hóa dữ liệu</h3><dl><div><dt>Quy trình</dt><dd>Kiểm tra biến, nguồn và logic mô hình trước khi làm sạch.</dd></div><div><dt>Đầu ra</dt><dd>Checklist phương pháp, tệp dữ liệu sạch và ghi chú đọc kết quả.</dd></div><div><dt>Vai trò</dt><dd>Cố vấn phương pháp và chuyên viên dữ liệu.</dd></div></dl></article>
+                <article><span>Nghiên cứu định lượng</span><h3>Phân tích SPSS có giải thích</h3><dl><div><dt>Quy trình</dt><dd>Thống nhất câu hỏi, kiểm tra dữ liệu và chạy mô hình phù hợp.</dd></div><div><dt>Đầu ra</dt><dd>Bảng kết quả, diễn giải chỉ số và điểm cần tự kiểm tra.</dd></div><div><dt>Vai trò</dt><dd>Chuyên viên dữ liệu.</dd></div></dl></article>
+                <article><span>Báo cáo bảo vệ</span><h3>Chuyển nội dung thành mạch trình bày</h3><dl><div><dt>Quy trình</dt><dd>Rút gọn nội dung, sắp xếp luận điểm và chuẩn hóa thị giác.</dd></div><div><dt>Đầu ra</dt><dd>Bộ slide, cấu trúc thuyết trình và checklist trước bảo vệ.</dd></div><div><dt>Vai trò</dt><dd>Biên tập trình bày.</dd></div></dl></article>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="intro-section" id="about" aria-labelledby="about-title">
+        <details class="home-disclosure" id="about">
+          <summary><span>Về Aplus Scholar</span><strong>Định hướng và hơn 4 năm kinh nghiệm</strong></summary>
+          <section class="intro-section" aria-labelledby="about-title">
           <div class="about-identity">
             <div class="section-mark" role="img" aria-label="Sách mở, ngôi sao và nguyệt quế">
               <svg class="academic-emblem" viewBox="180 180 894 894" aria-hidden="true" focusable="false">
@@ -250,9 +271,12 @@
             <p>Với hơn 4 năm kinh nghiệm, Aplus Scholar đồng hành cùng người học từ khi xác định câu hỏi đến lúc hoàn thiện cấu trúc, dữ liệu và cách trình bày nghiên cứu.</p>
             <p>Mỗi yêu cầu được tiếp cận theo mục tiêu, môn học và tiến độ thực tế. Chúng tôi làm rõ phương pháp, phạm vi hỗ trợ và trách nhiệm của người học để bạn chủ động với kết quả.</p>
           </div>
-        </section>
+          </section>
+        </details>
 
-        <section class="journey-section" id="journey" aria-labelledby="journey-title">
+        <details class="home-disclosure" id="journey">
+          <summary><span>Hành trình Aplus Scholar</span><strong>5 dấu mốc từ năm 2022 đến nay</strong></summary>
+          <section class="journey-section" aria-labelledby="journey-title">
           <div class="journey-header">
             <div>
               <p class="eyebrow">Dấu mốc phát triển</p>
@@ -299,9 +323,12 @@
               <p>Kéo, vuốt hoặc dùng phím mũi tên</p>
             </div>
           </div>
-        </section>
+          </section>
+        </details>
 
-        <section class="why-section" id="why-aplus" aria-labelledby="why-title">
+        <details class="home-disclosure" id="why-aplus">
+          <summary><span>Lý do chọn Aplus</span><strong>6 nguyên tắc đồng hành học thuật</strong></summary>
+          <section class="why-section" aria-labelledby="why-title">
           <div class="why-media" aria-label="Không gian hỗ trợ học thuật của Aplus Scholar">
             <img class="why-media-primary" src="assets/aplus-study-guidance.png" alt="Cố vấn học thuật trao đổi cùng hai sinh viên trong thư viện" />
             <div class="why-media-secondary">
@@ -339,13 +366,16 @@
               </details>
             </div>
           </div>
-        </section>
+          </section>
+        </details>
 
-        <section class="process-section" id="process" aria-labelledby="process-title">
+        <details class="home-disclosure" id="process">
+          <summary><span>Quy trình đồng hành</span><strong>3 bước từ trao đổi đến thực hiện</strong></summary>
+          <section class="process-section" aria-labelledby="process-title">
           <div class="process-intro">
             <p class="eyebrow">Cách Aplus đồng hành</p>
             <h2 id="process-title">Rõ ràng từ cuộc trao đổi đầu tiên.</h2>
-            <a class="text-link" href="#contact">Bắt đầu trao đổi <span aria-hidden="true">↘</span></a>
+            <a class="text-link" href="#contact">Nhận tư vấn <span aria-hidden="true">↘</span></a>
           </div>
           <ol class="process-list">
             <li>
@@ -365,9 +395,12 @@
               <div><h3>Bàn giao minh bạch</h3><p>Hoàn thiện theo phạm vi đã thống nhất, kèm lưu ý để bạn có thể chủ động bảo vệ kết quả.</p></div>
             </li>
           </ol>
-        </section>
+          </section>
+        </details>
 
-        <section class="policy-section" id="policy" aria-labelledby="policy-title">
+        <details class="home-disclosure" id="policy">
+          <summary><span>Chính sách Aplus Scholar</span><strong>Thanh toán, nội dung, bảo hành, hoàn tiền và dữ liệu</strong></summary>
+          <section class="policy-section" aria-labelledby="policy-title">
           <div class="policy-intro">
             <p class="eyebrow">Chính sách</p>
             <h2 id="policy-title">Minh bạch trong từng cam kết.</h2>
@@ -482,7 +515,8 @@
               </details>
             </div>
           </div>
-        </section>
+          </section>
+        </details>
 
         <section class="editorial-block" aria-label="Cam kết học thuật">
           <p class="editorial-quote">“Hiểu đúng phương pháp<br />là nền tảng của kết quả tốt.”</p>
@@ -558,7 +592,7 @@
             </div>
             <label class="consent-field"><input id="consent" name="consent" type="checkbox" required /> <span>Tôi đồng ý để Aplus Scholar sử dụng thông tin này nhằm phản hồi yêu cầu tư vấn.</span></label>
             <p class="form-privacy-link">Xem mục đích sử dụng, thời hạn lưu và quyền yêu cầu xóa tại <a href="#privacy-policy">Chính sách bảo mật dữ liệu</a>.</p>
-            <button class="button button-primary form-submit" type="submit">Gửi yêu cầu tư vấn</button>
+            <button class="button button-primary form-submit" type="submit">Nhận tư vấn</button>
             <p class="response-note" id="response-note">Khi tiếp nhận thành công, hệ thống sẽ hiển thị mã yêu cầu. Phản hồi dự kiến trong vòng 1 ngày làm việc.</p>
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
             <a class="form-email-fallback" id="form-email-fallback" href="mailto:aplusscholarr@gmail.com" hidden>Gửi qua email nếu hệ thống đang bảo trì.</a>
@@ -591,6 +625,6 @@
       <a href="tel:0915489902"><img src="assets/phone-call.svg" alt="" /> Gọi tư vấn</a>
       <a href="https://zalo.me/0915489902" target="_blank" rel="noopener noreferrer"><img src="assets/zalo.svg" alt="" /> Nhắn Zalo</a>
     </div>
-    <script src="script.js?v=20260902c"></script>
+    <script src="script.js?v=20260902d"></script>
   </body>
 </html>

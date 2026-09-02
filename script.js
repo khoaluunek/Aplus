@@ -59,6 +59,18 @@ const revealPrivacyPolicy = () => {
 document.querySelectorAll("a[href='#privacy-policy']").forEach((link) => link.addEventListener("click", revealPrivacyPolicy));
 if (window.location.hash === "#privacy-policy") revealPrivacyPolicy();
 
+const homeDisclosures = [...document.querySelectorAll(".home-disclosure")];
+const openDisclosureFromHash = () => {
+  const hashTarget = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
+  const disclosure = hashTarget?.matches(".home-disclosure") ? hashTarget : hashTarget?.closest(".home-disclosure");
+  if (disclosure) disclosure.open = true;
+};
+homeDisclosures.forEach((disclosure) => disclosure.addEventListener("toggle", () => {
+  if (disclosure.open) window.dispatchEvent(new Event("resize"));
+}));
+window.addEventListener("hashchange", openDisclosureFromHash);
+openDisclosureFromHash();
+
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".main-nav");
 menuToggle.addEventListener("click", () => {
@@ -201,6 +213,55 @@ function readFileAsBase64(file) {
   });
 }
 
+async function sendConsultationRequest(action, payload) {
+  const response = await fetch(action, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.message || "Hệ thống chưa thể tiếp nhận yêu cầu.");
+  return result;
+}
+
+const quickForm = document.getElementById("quick-consultation-form");
+if (quickForm) {
+  const quickStatus = document.getElementById("quick-form-status");
+  const quickSubmit = quickForm.querySelector("button[type='submit']");
+  const quickFallback = quickForm.querySelector(".quick-form-fallback");
+  quickForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const name = quickForm.elements.name.value.trim();
+    const phone = quickForm.elements.phone.value.replace(/\s/g, "");
+    const need = quickForm.elements.need.value;
+    const consent = quickForm.elements.consent.checked;
+    quickStatus.classList.remove("is-error", "is-success");
+    if (!name || !/^0\d{9}$/.test(phone) || !need || !consent) {
+      quickStatus.textContent = "Vui lòng nhập họ tên, số điện thoại 10 chữ số, nhu cầu và xác nhận đồng ý.";
+      quickStatus.classList.add("is-error");
+      return;
+    }
+
+    quickSubmit.disabled = true;
+    quickSubmit.textContent = "Đang gửi...";
+    quickStatus.textContent = "Đang gửi yêu cầu bảo mật...";
+    quickFallback.hidden = true;
+    try {
+      const result = await sendConsultationRequest(quickForm.action, { name, phone, need, email: "", message: "Yêu cầu tư vấn nhanh từ đầu trang", website: "", file: null });
+      quickForm.reset();
+      quickStatus.classList.add("is-success");
+      quickStatus.textContent = `Đã tiếp nhận yêu cầu ${result.requestId}. Aplus Scholar dự kiến phản hồi trong vòng 1 ngày làm việc.`;
+    } catch (error) {
+      quickStatus.classList.add("is-error");
+      quickStatus.textContent = error.message || "Chưa thể gửi yêu cầu. Vui lòng thử lại sau.";
+      quickFallback.hidden = false;
+    } finally {
+      quickSubmit.disabled = false;
+      quickSubmit.textContent = "Nhận tư vấn";
+    }
+  });
+}
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = form.elements.name.value.trim();
@@ -235,21 +296,15 @@ form.addEventListener("submit", async (event) => {
 
   try {
     const fileContent = briefFile ? await readFileAsBase64(briefFile) : "";
-    const response = await fetch(form.action, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({
-        name,
-        phone,
-        email,
-        need,
-        message: messageInput.value.trim(),
-        website: form.elements.website.value,
-        file: briefFile ? { name: briefFile.name, type: briefFile.type, size: briefFile.size, content: fileContent } : null
-      })
+    const result = await sendConsultationRequest(form.action, {
+      name,
+      phone,
+      email,
+      need,
+      message: messageInput.value.trim(),
+      website: form.elements.website.value,
+      file: briefFile ? { name: briefFile.name, type: briefFile.type, size: briefFile.size, content: fileContent } : null
     });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.message || "Hệ thống chưa thể tiếp nhận yêu cầu.");
 
     form.reset();
     setPhoneError();
@@ -261,6 +316,6 @@ form.addEventListener("submit", async (event) => {
     emailFallback.hidden = false;
   } finally {
     submitButton.disabled = false;
-    submitButton.textContent = "Gửi yêu cầu tư vấn";
+    submitButton.textContent = "Nhận tư vấn";
   }
 });

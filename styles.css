@@ -261,3 +261,69 @@
   .case-note-grid article,.case-note-grid article:first-child{grid-row:auto;min-height:0}
   .case-note-grid article:first-child{padding-top:68px}
 }
+
+/* Short consultation path, proof hierarchy and collapsible long-form content. */
+.quick-consult-section{position:relative;width:min(1320px,calc(100% - 56px));display:grid;grid-template-columns:minmax(270px,.7fr) minmax(0,1.3fr);gap:clamp(42px,7vw,96px);align-items:center;padding:54px clamp(28px,4vw,58px);margin:0 auto 24px;border:1px solid rgba(210,226,255,.34);border-radius:16px;background:radial-gradient(circle at 10% 0%,rgba(255,255,255,.17),transparent 42%),linear-gradient(118deg,rgba(255,255,255,.1),rgba(105,151,241,.035)),rgba(7,29,72,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 24px 58px rgba(0,0,0,.16);-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%)}
+.quick-consult-copy .eyebrow{margin-bottom:11px}
+.quick-consult-copy h2{max-width:480px;margin-bottom:15px;font-size:clamp(2rem,3vw,3.15rem)}
+.quick-consult-copy>p:not(.eyebrow){max-width:470px;margin-bottom:18px;color:#bdcbe4;font-size:15px;line-height:1.6}
+.quick-contact-links{display:flex;flex-wrap:wrap;gap:10px 20px;color:#e5edff;font-size:13px;font-weight:780}
+.quick-contact-links a{text-decoration:underline;text-underline-offset:4px}
+.quick-consult-form{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:14px 12px;align-items:end}
+.quick-consult-form>div{display:grid;gap:6px}
+.quick-consult-form label:not(.quick-consent){color:#e5edff;font-size:12px;font-weight:750}
+.quick-consult-form input,.quick-consult-form select{width:100%;min-height:48px;padding:11px 13px;border:1px solid rgba(193,214,255,.42);border-radius:10px;outline:none;background:rgba(9,35,83,.72);color:#f4f7ff}
+.quick-consult-form input::placeholder,.quick-consult-form select:invalid{color:#b5c4df}
+.quick-consult-form select option{color:#061a46;background:#f8faff}
+.quick-consult-form input:focus,.quick-consult-form select:focus{border-color:#e5eeff;box-shadow:0 0 0 3px rgba(196,215,255,.17)}
+.quick-consent{grid-column:1/3;display:flex;align-items:flex-start;gap:9px;color:#c4d2ea;font-size:12px;line-height:1.45}
+.quick-consent input{width:17px;height:17px;min-height:0;flex:0 0 auto;margin-top:1px;accent-color:#c8d8ff}
+.quick-consent a,.quick-form-fallback{color:#e7efff;text-decoration:underline;text-underline-offset:3px}
+.quick-consult-form>.button{grid-column:3;grid-row:2;min-height:48px;white-space:nowrap}
+.quick-form-status,.quick-form-fallback{grid-column:1/-1;margin:0;font-size:12px;line-height:1.5}
+.quick-form-status.is-success,.quick-form-status.is-error{padding:11px 13px;border-radius:10px}
+.quick-form-status.is-success{border:1px solid rgba(181,218,196,.4);background:rgba(52,117,82,.2);color:#e6fff0}
+.quick-form-status.is-error{border:1px solid rgba(255,196,196,.34);background:rgba(130,46,57,.18);color:#ffd7d7}
+.quick-form-fallback[hidden]{display:none}
+
+.trust-proof{width:min(1240px,calc(100% - 56px));display:grid;grid-template-columns:repeat(4,1fr);padding:35px 0 46px;margin:0 auto}
+.trust-proof article{display:grid;gap:7px;padding:0 30px;border-left:1px solid rgba(205,222,255,.24)}
+.trust-proof article:first-child{padding-left:0;border-left:0}
+.trust-proof strong{color:#f1f5ff;font-size:20px;letter-spacing:-.025em}
+.trust-proof span{max-width:230px;color:#aebdd7;font-size:13px;line-height:1.5}
+
+.home-disclosure{border-top:1px solid rgba(205,222,255,.32);border-bottom:1px solid rgba(205,222,255,.32);background:rgba(5,20,53,.28)}
+.home-disclosure+.home-disclosure{border-top:0}
+.home-disclosure>summary{position:relative;width:min(1240px,calc(100% - 56px));display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;min-height:92px;padding:20px 56px 20px 0;margin:0 auto;color:#f1f5ff;cursor:pointer;list-style:none}
+.home-disclosure>summary::-webkit-details-marker{display:none}
+.home-disclosure>summary span{font-size:22px;font-weight:790;letter-spacing:-.025em}
+.home-disclosure>summary strong{color:#aebfdd;font-size:14px;font-weight:620}
+.home-disclosure>summary::after{content:"+";position:absolute;right:0;display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(199,219,255,.48);border-radius:50%;color:#a9c4ff;font-size:23px;font-weight:500}
+.home-disclosure[open]>summary::after{content:"−";background:rgba(205,222,255,.12);color:#fff}
+.home-disclosure[open]>summary{border-bottom:1px solid rgba(205,222,255,.2)}
+.home-disclosure>.journey-section{border-top:0}
+.home-disclosure>.process-section,.home-disclosure>.policy-section{padding-top:96px;padding-bottom:104px}
+
+.support-label{margin:0 0 4px!important;color:#9fbdff!important;font-size:11px!important;font-weight:820;text-transform:uppercase;letter-spacing:.09em}
+.case-note-grid dl{display:grid;gap:10px;margin:15px 0 0}
+.case-note-grid dl div{display:grid;grid-template-columns:64px 1fr;gap:10px;padding-top:9px;border-top:1px solid rgba(205,222,255,.16)}
+.case-note-grid dt{color:#9fbdff;font-size:11px;font-weight:820;text-transform:uppercase;letter-spacing:.05em}
+.case-note-grid dd{margin:0;color:#c0cee6;font-size:13px;line-height:1.48}
+
+@media(max-width:900px){
+  .quick-consult-section{grid-template-columns:1fr;gap:30px}
+  .trust-proof{grid-template-columns:1fr 1fr;gap:28px 0}
+  .trust-proof article:nth-child(3){padding-left:0;border-left:0}
+}
+@media(max-width:650px){
+  .quick-consult-section{width:min(100% - 32px,640px);padding:34px 22px;margin-bottom:18px}
+  .quick-consult-form{grid-template-columns:1fr}
+  .quick-consent,.quick-consult-form>.button{grid-column:auto;grid-row:auto}
+  .trust-proof{width:min(100% - 32px,640px);grid-template-columns:1fr;padding:27px 0 38px}
+  .trust-proof article,.trust-proof article:first-child,.trust-proof article:nth-child(3){padding:15px 0;border-left:0;border-top:1px solid rgba(205,222,255,.22)}
+  .trust-proof article:first-child{border-top:0}
+  .home-disclosure>summary{width:min(100% - 32px,640px);grid-template-columns:1fr;gap:5px;min-height:82px;padding-right:48px}
+  .home-disclosure>summary span{font-size:19px}
+  .home-disclosure>summary strong{font-size:12px;line-height:1.45}
+  .case-note-grid dl div{grid-template-columns:1fr;gap:4px}
+}
