@@ -73,14 +73,16 @@ openDisclosureFromHash();
 
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".main-nav");
-menuToggle.addEventListener("click", () => {
-  const isOpen = nav.classList.toggle("is-open");
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-});
-nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-  nav.classList.remove("is-open");
-  menuToggle.setAttribute("aria-expanded", "false");
-}));
+if (menuToggle && nav) {
+  menuToggle.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("is-open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+  nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+    nav.classList.remove("is-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }));
+}
 
 const mobileContactBar = document.querySelector(".mobile-contact-bar");
 const heroSection = document.querySelector(".hero");
@@ -182,6 +184,7 @@ if (journeyTrack && journeyCards.length && journeyPrevious && journeyNext) {
 }
 
 const form = document.getElementById("consultation-form");
+if (form) {
 const status = document.getElementById("form-status");
 const phoneInput = document.getElementById("phone");
 const phoneError = document.getElementById("phone-error");
@@ -205,6 +208,10 @@ function syncContactRequirements() {
   const method = contactMethodInput.value;
   phoneInput.required = method === "phone" || method === "zalo";
   emailInput.required = method === "email";
+  document.querySelectorAll(".channel-field").forEach((field) => {
+    const channels = (field.dataset.contactChannel || "").split(",");
+    field.hidden = !channels.includes(method);
+  });
   if (!phoneInput.required && !phoneInput.value.trim()) setPhoneError();
 }
 
@@ -280,3 +287,4 @@ form.addEventListener("submit", async (event) => {
     submitButton.textContent = "Nhận tư vấn";
   }
 });
+}
