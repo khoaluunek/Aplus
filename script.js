@@ -83,23 +83,23 @@ nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () =>
 }));
 
 const mobileContactBar = document.querySelector(".mobile-contact-bar");
-const supportingServices = document.getElementById("supporting-services");
+const heroSection = document.querySelector(".hero");
 const contactSection = document.getElementById("contact");
-if (mobileContactBar && supportingServices && contactSection && "IntersectionObserver" in window) {
-  let hasReachedSupportingServices = false;
+if (mobileContactBar && heroSection && contactSection && "IntersectionObserver" in window) {
+  let hasLeftHero = false;
   let isContactSectionVisible = false;
   const updateMobileContactBar = () => {
-    mobileContactBar.classList.toggle("is-suppressed", !hasReachedSupportingServices || isContactSectionVisible);
+    mobileContactBar.classList.toggle("is-suppressed", !hasLeftHero || isContactSectionVisible);
   };
-  const contactBarObserver = new IntersectionObserver(([entry]) => {
-    hasReachedSupportingServices = entry.isIntersecting || entry.boundingClientRect.top <= 0;
+  const heroObserver = new IntersectionObserver(([entry]) => {
+    hasLeftHero = !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
     updateMobileContactBar();
   }, { threshold: 0 });
   const contactSectionObserver = new IntersectionObserver(([entry]) => {
     isContactSectionVisible = entry.isIntersecting;
     updateMobileContactBar();
   }, { threshold: 0.08 });
-  contactBarObserver.observe(supportingServices);
+  heroObserver.observe(heroSection);
   contactSectionObserver.observe(contactSection);
 }
 
@@ -186,8 +186,8 @@ const status = document.getElementById("form-status");
 const phoneInput = document.getElementById("phone");
 const phoneError = document.getElementById("phone-error");
 const emailInput = document.getElementById("email");
+const contactMethodInput = document.getElementById("contact-method");
 const submitButton = form.querySelector("button[type='submit']");
-const messageInput = document.getElementById("message");
 const briefFileInput = document.getElementById("brief-file");
 const emailFallback = document.getElementById("form-email-fallback");
 
@@ -201,23 +201,24 @@ phoneInput.addEventListener("input", () => {
   if (!normalized || /^0\d{9}$/.test(normalized)) setPhoneError();
 });
 
+function syncContactRequirements() {
+  const method = contactMethodInput.value;
+  phoneInput.required = method === "phone" || method === "zalo";
+  emailInput.required = method === "email";
+  if (!phoneInput.required && !phoneInput.value.trim()) setPhoneError();
+}
+
+contactMethodInput.addEventListener("change", syncContactRequirements);
+syncContactRequirements();
+
 const maximumBriefFileSize = 3 * 1024 * 1024;
 const allowedBriefExtensions = /\.(pdf|doc|docx)$/i;
-
-function readFileAsBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => resolve(String(reader.result).split(",")[1] || ""), { once: true });
-    reader.addEventListener("error", () => reject(new Error("Không thể đọc tệp đã chọn.")), { once: true });
-    reader.readAsDataURL(file);
-  });
-}
 
 async function sendConsultationRequest(action, payload) {
   const response = await fetch(action, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify(payload)
+    headers: { "Accept": "application/json" },
+    body: payload
   });
   const result = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(result.message || "Hệ thống chưa thể tiếp nhận yêu cầu.");
@@ -229,15 +230,19 @@ form.addEventListener("submit", async (event) => {
   const name = form.elements.name.value.trim();
   const phone = phoneInput.value.replace(/\s/g, "");
   const email = emailInput.value.trim();
+  const contactMethod = contactMethodInput.value;
   const need = form.elements.need.value;
   const consent = form.elements.consent.checked;
-  const validPhone = /^0\d{9}$/.test(phone);
+  const phoneIsRequired = contactMethod === "phone" || contactMethod === "zalo";
+  const emailIsRequired = contactMethod === "email";
+  const validPhone = !phone && !phoneIsRequired ? true : /^0\d{9}$/.test(phone);
   const validEmail = !email || emailInput.validity.valid;
 
   setPhoneError(validPhone ? "" : "Nhập số điện thoại Việt Nam gồm 10 chữ số.");
-  if (!name || !need || !consent || !validPhone || !validEmail) {
+  if (!name || !contactMethod || !need || !consent || !validPhone || !validEmail || (emailIsRequired && !email)) {
     status.textContent = "Vui lòng hoàn thiện các thông tin bắt buộc trước khi tiếp tục.";
     status.classList.add("is-error");
+    form.reportValidity();
     return;
   }
 
@@ -257,18 +262,12 @@ form.addEventListener("submit", async (event) => {
   submitButton.textContent = "Đang gửi...";
 
   try {
-    const fileContent = briefFile ? await readFileAsBase64(briefFile) : "";
-    const result = await sendConsultationRequest(form.action, {
-      name,
-      phone,
-      email,
-      need,
-      message: messageInput.value.trim(),
-      website: form.elements.website.value,
-      file: briefFile ? { name: briefFile.name, type: briefFile.type, size: briefFile.size, content: fileContent } : null
-    });
+    const requestData = new FormData(form);
+    requestData.set("phone", phone);
+    const result = await sendConsultationRequest(form.action, requestData);
 
     form.reset();
+    syncContactRequirements();
     setPhoneError();
     status.classList.add("is-success");
     status.textContent = `Đã tiếp nhận yêu cầu ${result.requestId}. Aplus Scholar dự kiến phản hồi trong vòng 1 ngày làm việc.`;

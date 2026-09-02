@@ -1,0 +1,9 @@
+{
+  "name": "aplus-scholar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aplus Scholar academic support website",
+  "dependencies": {
+    "busboy": "1.6.0"
+  }
+}

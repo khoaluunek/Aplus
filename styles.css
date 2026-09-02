@@ -358,3 +358,43 @@
   .hero-actions{align-items:flex-start;flex-direction:column;gap:18px;margin-left:32px}
   .hero-actions .button{flex:none;white-space:nowrap}
 }
+
+/* Trust, pricing and privacy improvements from the September review. */
+.contact-section-early{border-bottom:1px solid var(--line)}
+.operator-identity{display:grid;gap:0;width:min(100%,520px);margin:28px 0 0;border-top:1px solid rgba(205,222,255,.3)}
+.operator-identity div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:13px 0;border-bottom:1px solid rgba(205,222,255,.2)}
+.operator-identity dt{color:#9fbdff;font-size:13px;font-weight:800;letter-spacing:.035em}
+.operator-identity dd{margin:0;color:#e5edfc;font-size:15px;line-height:1.5}
+.operator-identity a{color:#eaf1ff;text-decoration:underline;text-underline-offset:3px}
+.contact-form>.form-field{grid-column:auto}
+.contact-form>.form-field-wide,.contact-form>.consent-field,.contact-form>.form-privacy-link,.contact-form>.form-submit,.contact-form>.response-note,.contact-form>.form-status,.contact-form>.form-email-fallback{grid-column:1/-1}
+.contact-form label{font-size:15px}
+.contact-form input:not([type="checkbox"]),.contact-form select{min-height:48px}
+.contact-form textarea{min-height:112px}
+.upload-privacy-note{padding:17px 18px;border:1px solid rgba(182,207,255,.38);border-radius:12px;background:rgba(12,42,96,.45)}
+.upload-privacy-note strong{display:block;margin-bottom:7px;color:#f1f5ff;font-size:16px}
+.upload-privacy-note p{margin:0;color:#c6d4eb;font-size:14px;line-height:1.6}
+.pricing-terms{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:22px;border:1px solid rgba(205,222,255,.25);border-radius:14px;background:rgba(6,25,63,.38)}
+.pricing-terms p{display:grid;align-content:start;gap:7px;margin:0;padding:20px 22px}
+.pricing-terms p+p{border-left:1px solid rgba(205,222,255,.2)}
+.pricing-terms strong{color:#f0f4ff;font-size:15px}
+.pricing-terms span{color:#c4d1e7;font-size:14px;line-height:1.55}
+.pricing-terms a{color:#dce8ff;text-decoration:underline;text-underline-offset:3px}
+.support-offers .digital-support-offer{display:block;padding:0;border-bottom:1px solid rgba(205,222,255,.28)}
+.digital-support-offer summary{display:grid;grid-template-columns:50px 1fr;gap:18px;align-items:center;min-height:72px;padding:16px 0;color:#f3f6ff;cursor:pointer;list-style:none}
+.digital-support-offer summary::-webkit-details-marker{display:none}
+.digital-support-offer summary>span{color:#9dbbff;font-size:14px;font-weight:850}
+.digital-support-offer summary strong{font-size:20px}
+.digital-support-offer>p{padding:0 0 20px 68px}
+.service-tab,.why-accordion summary,.digital-support-offer summary,.quick-contact-links a,.contact-channel{min-height:44px}
+
+@media(max-width:850px){
+  .pricing-terms{grid-template-columns:1fr}
+  .pricing-terms p+p{border-top:1px solid rgba(205,222,255,.2);border-left:0}
+}
+
+@media(max-width:560px){
+  .operator-identity div{grid-template-columns:1fr;gap:4px}
+  .contact-form>.form-field,.contact-form>.form-field-wide,.contact-form>.consent-field,.contact-form>.form-privacy-link,.contact-form>.form-submit,.contact-form>.response-note,.contact-form>.form-status,.contact-form>.form-email-fallback{grid-column:auto}
+  .digital-support-offer>p{padding-left:0}
+}
