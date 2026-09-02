@@ -62,6 +62,84 @@ nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () =>
   menuToggle.setAttribute("aria-expanded", "false");
 }));
 
+const journeyTrack = document.querySelector(".journey-track");
+const journeyCards = [...document.querySelectorAll(".journey-card")];
+const journeyPrevious = document.querySelector("[data-journey-direction='previous']");
+const journeyNext = document.querySelector("[data-journey-direction='next']");
+const journeyStatus = document.getElementById("journey-status");
+
+if (journeyTrack && journeyCards.length && journeyPrevious && journeyNext) {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let activeJourneyIndex = 0;
+  let isJourneyDragging = false;
+  let journeyPointerStart = 0;
+  let journeyScrollStart = 0;
+  let journeyFrame = 0;
+
+  const getJourneyStep = () => {
+    const styles = window.getComputedStyle(journeyTrack);
+    return journeyCards[0].getBoundingClientRect().width + Number.parseFloat(styles.columnGap || styles.gap || "0");
+  };
+
+  const getJourneyIndex = () => Math.max(0, Math.min(journeyCards.length - 1, Math.round(journeyTrack.scrollLeft / getJourneyStep())));
+
+  const updateJourney = () => {
+    const index = getJourneyIndex();
+    const visibleCount = Math.max(1, Math.round(journeyTrack.clientWidth / getJourneyStep()));
+    const endIndex = Math.min(journeyCards.length - 1, index + visibleCount - 1);
+    activeJourneyIndex = index;
+    journeyPrevious.disabled = journeyTrack.scrollLeft <= 2;
+    journeyNext.disabled = journeyTrack.scrollLeft >= journeyTrack.scrollWidth - journeyTrack.clientWidth - 2;
+    if (journeyStatus) {
+      journeyStatus.textContent = index === endIndex
+        ? `Mốc ${journeyCards[index].dataset.year}, ${index + 1} trên ${journeyCards.length}`
+        : `Các mốc ${journeyCards[index].dataset.year} đến ${journeyCards[endIndex].dataset.year}`;
+    }
+  };
+
+  const goToJourney = (index) => {
+    activeJourneyIndex = Math.max(0, Math.min(journeyCards.length - 1, index));
+    journeyTrack.scrollTo({ left: activeJourneyIndex * getJourneyStep(), behavior: reduceMotion.matches ? "auto" : "smooth" });
+  };
+
+  journeyPrevious.addEventListener("click", () => goToJourney(getJourneyIndex() - 1));
+  journeyNext.addEventListener("click", () => goToJourney(getJourneyIndex() + 1));
+  journeyTrack.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    goToJourney(getJourneyIndex() + (event.key === "ArrowRight" ? 1 : -1));
+  });
+  journeyTrack.addEventListener("scroll", () => {
+    window.cancelAnimationFrame(journeyFrame);
+    journeyFrame = window.requestAnimationFrame(updateJourney);
+  }, { passive: true });
+  journeyTrack.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "mouse") return;
+    isJourneyDragging = true;
+    journeyPointerStart = event.clientX;
+    journeyScrollStart = journeyTrack.scrollLeft;
+    journeyTrack.classList.add("is-dragging");
+    journeyTrack.setPointerCapture(event.pointerId);
+  });
+  journeyTrack.addEventListener("pointermove", (event) => {
+    if (!isJourneyDragging) return;
+    journeyTrack.scrollLeft = journeyScrollStart - (event.clientX - journeyPointerStart);
+  });
+
+  const endJourneyDrag = (event) => {
+    if (!isJourneyDragging) return;
+    isJourneyDragging = false;
+    journeyTrack.classList.remove("is-dragging");
+    if (journeyTrack.hasPointerCapture(event.pointerId)) journeyTrack.releasePointerCapture(event.pointerId);
+    goToJourney(getJourneyIndex());
+  };
+
+  journeyTrack.addEventListener("pointerup", endJourneyDrag);
+  journeyTrack.addEventListener("pointercancel", endJourneyDrag);
+  window.addEventListener("resize", updateJourney);
+  updateJourney();
+}
+
 const form = document.getElementById("consultation-form");
 const status = document.getElementById("form-status");
 const phoneInput = document.getElementById("phone");
