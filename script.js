@@ -284,7 +284,7 @@ form.addEventListener("submit", async (event) => {
     emailFallback.hidden = false;
   } finally {
     submitButton.disabled = false;
-    submitButton.textContent = "Nhận tư vấn";
+    submitButton.textContent = "Nhận phạm vi và báo giá";
   }
 });
 }
