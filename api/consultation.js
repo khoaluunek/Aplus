@@ -68,7 +68,14 @@ async function notifyTelegram(message) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: chatId, text: message, disable_web_page_preview: true })
   });
-  if (!result.ok) throw new Error("TELEGRAM_SEND_FAILED");
+  if (!result.ok) {
+    let detail = "unknown error";
+    try {
+      const payload = await result.json();
+      detail = String(payload.description || detail).replace(/[\r\n]/g, " ").slice(0, 180);
+    } catch {}
+    throw new Error(`TELEGRAM_SEND_FAILED: ${detail}`);
+  }
 }
 
 function isAllowedOrigin(origin) {
@@ -243,9 +250,10 @@ async function consultationHandler(request, response) {
   try {
     await notifyTelegram(telegramMessage);
     await updateTelegramStatus(requestId, "sent");
-  } catch {
+  } catch (error) {
     // Keep the saved request available even if Telegram is temporarily unavailable.
-    await updateTelegramStatus(requestId, "failed").catch(() => {});
+    const detail = String(error?.message || "Telegram error").replace(/^TELEGRAM_SEND_FAILED:\s*/i, "").slice(0, 180);
+    await updateTelegramStatus(requestId, `failed: ${detail}`).catch(() => {});
   }
 
   const resendApiKey = process.env.RESEND_API_KEY;
