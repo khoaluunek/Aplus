@@ -22,6 +22,40 @@ function escapeHtml(value) {
   return value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" })[character]);
 }
 
+function getSupabaseConfig() {
+  const url = String(process.env.SUPABASE_URL || "").trim().replace(/\/$/, "");
+  const key = String(process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
+  return url && key ? { url, key } : null;
+}
+
+async function saveToSupabase(record) {
+  const config = getSupabaseConfig();
+  if (!config) throw new Error("SUPABASE_NOT_CONFIGURED");
+  const result = await fetch(`${config.url}/rest/v1/consultation_requests`, {
+    method: "POST",
+    headers: {
+      apikey: config.key,
+      Authorization: `Bearer ${config.key}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify(record)
+  });
+  if (!result.ok) throw new Error("SUPABASE_INSERT_FAILED");
+}
+
+async function notifyTelegram(message) {
+  const token = String(process.env.TELEGRAM_BOT_TOKEN || "").trim();
+  const chatId = String(process.env.TELEGRAM_CHAT_ID || "").trim();
+  if (!token || !chatId) throw new Error("TELEGRAM_NOT_CONFIGURED");
+  const result = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: chatId, text: message, disable_web_page_preview: true })
+  });
+  if (!result.ok) throw new Error("TELEGRAM_SEND_FAILED");
+}
+
 function isAllowedOrigin(origin) {
   if (!origin) return true;
   try {
@@ -152,17 +186,57 @@ async function consultationHandler(request, response) {
     emailAttachment = { filename: parsed.attachment.name, content: parsed.attachment.buffer.toString("base64") };
   }
 
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const consultationInbox = process.env.CONSULTATION_INBOX || "aplusscholarr@gmail.com";
-  const consultationFrom = process.env.CONSULTATION_FROM || "Aplus Scholar <onboarding@resend.dev>";
-  if (!resendApiKey) {
-    return sendJson(response, 503, { message: "Kênh gửi trực tiếp đang được cấu hình. Vui lòng gửi qua email dự phòng." });
-  }
-
   const requestId = `AP-${randomUUID().slice(0, 8).toUpperCase()}`;
   const contactLabels = { phone: "Gọi điện", zalo: "Zalo", email: "Email" };
   const submittedAt = new Intl.DateTimeFormat("vi-VN", { dateStyle: "full", timeStyle: "short", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
   const safeMessage = escapeHtml(message || "Chưa cung cấp").replace(/\n/g, "<br />");
+
+  try {
+    await saveToSupabase({
+      request_id: requestId,
+      name,
+      phone: phone || null,
+      email: email || null,
+      contact_method: contactMethod,
+      contact_time: contactTime || null,
+      need,
+      message: message || null,
+      attachment_name: parsed.attachment?.name || null,
+      attachment_size: parsed.attachment?.buffer.length || null,
+      consent_at: new Date().toISOString(),
+      status: "received",
+      telegram_status: "pending"
+    });
+  } catch {
+    return sendJson(response, 502, { message: "Không thể lưu yêu cầu lúc này. Vui lòng thử lại sau ít phút." });
+  }
+
+  const telegramMessage = [
+    `📩 YÊU CẦU TƯ VẤN MỚI · ${requestId}`,
+    `Họ tên: ${name}`,
+    `Kênh phản hồi: ${contactLabels[contactMethod]}`,
+    `Số điện thoại: ${phone || "Không cung cấp"}`,
+    `Email: ${email || "Không cung cấp"}`,
+    `Khung giờ: ${contactTime || "Không yêu cầu"}`,
+    `Nhu cầu: ${need}`,
+    `Tệp đính kèm: ${parsed.attachment?.name || "Không có"}`,
+    `Thời gian: ${submittedAt}`,
+    "",
+    `Nội dung: ${message || "Chưa cung cấp"}`
+  ].join("\n").slice(0, 3900);
+
+  try {
+    await notifyTelegram(telegramMessage);
+  } catch {
+    // Keep the saved request available even if Telegram is temporarily unavailable.
+  }
+
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const consultationInbox = process.env.CONSULTATION_INBOX || "aplusscholarr@gmail.com";
+  const consultationFrom = process.env.CONSULTATION_FROM || "Aplus Scholar <onboarding@resend.dev>";
+  if (!resendApiKey) {
+    return sendJson(response, 200, { requestId, receivedAt: new Date().toISOString() });
+  }
 
   let resendResponse;
   try {
