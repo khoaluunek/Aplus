@@ -44,6 +44,21 @@ async function saveToSupabase(record) {
   if (!result.ok) throw new Error("SUPABASE_INSERT_FAILED");
 }
 
+async function updateTelegramStatus(requestId, status) {
+  const config = getSupabaseConfig();
+  if (!config) return;
+  await fetch(`${config.url}/rest/v1/consultation_requests?request_id=eq.${encodeURIComponent(requestId)}`, {
+    method: "PATCH",
+    headers: {
+      apikey: config.key,
+      Authorization: `Bearer ${config.key}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify({ telegram_status: status })
+  });
+}
+
 async function notifyTelegram(message) {
   const token = String(process.env.TELEGRAM_BOT_TOKEN || "").trim();
   const chatId = String(process.env.TELEGRAM_CHAT_ID || "").trim();
@@ -227,8 +242,10 @@ async function consultationHandler(request, response) {
 
   try {
     await notifyTelegram(telegramMessage);
+    await updateTelegramStatus(requestId, "sent");
   } catch {
     // Keep the saved request available even if Telegram is temporarily unavailable.
+    await updateTelegramStatus(requestId, "failed").catch(() => {});
   }
 
   const resendApiKey = process.env.RESEND_API_KEY;
