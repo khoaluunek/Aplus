@@ -564,3 +564,168 @@
   .sample-quote dl{grid-template-columns:1fr}
   .file-caution{display:block;margin:3px 0 0}
 }
+
+/* 2026-09-11 light academic theme with a translucent browser-like glass treatment. */
+:root{
+  color-scheme:light;
+  --navy-950:#051b4f;
+  --navy-900:#082a72;
+  --navy-800:#123f8d;
+  --blue:#164aa6;
+  --blue-soft:#315fb3;
+  --white:#f8faff;
+  --muted:#52627a;
+  --line:rgba(8,42,114,.14);
+  --shadow:0 24px 68px rgba(20,57,122,.14);
+  --paper:#ffffff;
+  --paper-blue:#f4f8ff;
+  --ink:#071f58;
+  --ink-soft:#52627a;
+  --glass:rgba(255,255,255,.42);
+  --glass-strong:rgba(255,255,255,.58);
+  --glass-border:rgba(255,255,255,.82);
+  --glass-shadow:inset 0 1px 0 rgba(255,255,255,.94),inset 0 -1px 0 rgba(22,74,166,.08),0 20px 52px rgba(24,62,128,.11);
+}
+
+body{background:var(--paper);color:var(--ink)}
+body::before{background:radial-gradient(circle at 78% 8%,rgba(65,121,220,.12),transparent 30%),radial-gradient(circle at 4% 48%,rgba(99,148,230,.08),transparent 25%),linear-gradient(180deg,#fff 0%,#fafdff 55%,#fff 100%)}
+body::after{opacity:.34;background-image:linear-gradient(rgba(18,68,151,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(18,68,151,.035) 1px,transparent 1px);mask-image:linear-gradient(to bottom,black,transparent 70%)}
+
+h1,h2,h3{color:var(--ink)}
+.eyebrow,.service-index,.service-kicker,.service-detail-row>span,.service-detail-row dt,.review-standard li::before,.policy-number,.data-lifecycle-head,.file-caution,.sample-quote>span,.sample-quote dt,.support-offers article>span,.case-note-grid span,.case-note-grid dt,.support-label,.contact-channel-label,.operator-identity dt{color:var(--blue)!important}
+.hero-intro,.intro-body,.section-heading-copy,.service-content p,.service-note,.process-list p,.why-accordion details p,.support-intro>p:not(.eyebrow),.specialist-roles span,.support-offers p,.case-notes-heading>p:last-child,.case-note-grid p,.case-note-grid dd,.journey-lede,.purchase-intro p,.accountability-main p,.accountability-list p,.subpage-hero p:not(.eyebrow),.service-detail-row>div>p:not(.boundary-note),.review-standard>div p,.evidence-cases>div:first-child>p:not(.eyebrow),.payment-summary span,.payment-note,.policy-content>p,.policy-content li,.policy-content-grid p,.faq-page p,.sample-quote>p,.purchase-rules li,.data-lifecycle div:not(.data-lifecycle-head) span,.footer-brand p,.copyright,.form-help,.form-privacy-link,.response-note{color:var(--ink-soft)}
+
+.site-header{border-bottom-color:var(--line);background:rgba(255,255,255,.36);-webkit-backdrop-filter:blur(28px) saturate(175%);backdrop-filter:blur(28px) saturate(175%)}
+.brand img,.footer-brand img{mix-blend-mode:multiply}
+.main-nav{color:#25436f}
+.main-nav>a:not(.nav-cta):hover,.main-nav a[aria-current="page"]{color:var(--navy-900)}
+.menu-toggle{color:var(--navy-900)}
+.nav-cta{color:var(--navy-900)!important}
+@media(max-width:850px){.main-nav{background:rgba(255,255,255,.82);border-color:rgba(255,255,255,.92);box-shadow:var(--glass-shadow);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%)}}
+
+.hero-media img,.why-media img,.subpage-hero>img{border-color:rgba(8,42,114,.12);box-shadow:0 24px 62px rgba(20,57,122,.14)}
+.hero-media::before{border-color:rgba(22,74,166,.26)}
+.hero-media::after{color:rgba(22,74,166,.08)}
+.hero::before{border-color:rgba(22,74,166,.18)!important;box-shadow:inset 0 0 0 16px rgba(22,74,166,.035),inset 0 0 0 52px rgba(22,74,166,.02)!important}
+.hero::after{color:rgba(8,42,114,.52)!important}
+.text-link{color:var(--navy-900)}
+.button-primary{background:var(--navy-900);color:#fff;box-shadow:0 14px 34px rgba(8,42,114,.2)}
+.button-primary:hover{background:#123f8d}
+
+.principles,.trust-proof,.home-disclosure,.services-section,.contact-section{border-color:var(--line);background:rgba(244,248,255,.56)}
+.principles p,.trust-proof strong,.home-disclosure>summary,.home-disclosure>summary span{color:var(--ink)}
+.principles p+p,.trust-proof article,.home-disclosure>summary,.home-disclosure[open]>summary,.operator-identity,.operator-identity div,.support-section,.support-offers article,.specialist-roles,.specialist-roles p,.service-ethics-note,.service-detail-page,.service-detail-row,.service-detail-row dl,.service-detail-row dl div,.purchase-clarity,.accountability,.data-lifecycle,.data-lifecycle>div+div,.policy-content,.policy-disclosure,.service-summary-wrap,.service-summary-table th,.service-summary-table td{border-color:var(--line)}
+.trust-proof span,.home-disclosure>summary strong{color:var(--ink-soft)}
+.home-disclosure>summary::after,.why-accordion summary::after,.faq-page summary::after,.policy-disclosure summary::after,.form-details>summary::after{border-color:rgba(22,74,166,.24);color:var(--blue)}
+.home-disclosure[open]>summary::after{background:rgba(22,74,166,.08);color:var(--navy-900)}
+
+.intro-section::after,.process-intro::after,.contact-section::after{color:rgba(22,74,166,.055)}
+.about-identity,.about-identity[style]{border-color:var(--line)}
+.about-tenure strong{color:var(--ink)}
+.about-tenure span{color:var(--blue)}
+.section-mark{color:var(--blue-soft)}
+
+.service-tab{border-bottom-color:var(--line);color:#5b6a82}
+.service-tab:hover,.service-tab.is-active{color:var(--navy-900)}
+.service-tab.is-active{border-bottom-color:var(--blue)}
+.service-content h3,.service-list,.service-facts dd,.service-ethics-note strong,.service-cta strong{color:var(--ink)}
+.service-list li{border-bottom-color:var(--line)}
+.service-facts dt{color:var(--blue)}
+.service-ethics-note p,.service-cta span{color:var(--ink-soft)}
+.service-scope,.boundary-note{border-left-color:var(--blue);background:rgba(22,74,166,.06);color:#304d78!important}
+.service-scope strong,.boundary-note strong{color:var(--navy-900)}
+
+.why-section::before,.support-section::before,.contact-section::before,.site-footer::before,.journey-section::before{border-color:rgba(22,74,166,.12);box-shadow:inset 0 0 0 20px rgba(22,74,166,.025),inset 0 0 0 54px rgba(22,74,166,.014)}
+.why-accordion{border-top-color:var(--line)}
+.why-accordion details{border-bottom-color:var(--line)}
+.why-accordion summary{color:var(--ink)}
+.why-accordion details[open]{background:linear-gradient(90deg,rgba(22,74,166,.07),transparent 88%)}
+
+.journey-section{border-color:var(--line);background:linear-gradient(112deg,rgba(242,247,255,.88),rgba(255,255,255,.66) 54%,rgba(237,244,255,.82))}
+.journey-control{border-color:var(--glass-border);background:linear-gradient(145deg,rgba(255,255,255,.66),rgba(255,255,255,.18)),rgba(255,255,255,.32);box-shadow:var(--glass-shadow);color:var(--navy-900);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%)}
+.journey-control:hover:not(:disabled){border-color:#fff;background:rgba(255,255,255,.62)}
+.journey-carousel{border-color:var(--glass-border);background:radial-gradient(circle at 12% 0%,rgba(255,255,255,.84),transparent 38%),linear-gradient(120deg,rgba(255,255,255,.48),rgba(214,230,255,.18)),rgba(255,255,255,.22);box-shadow:var(--glass-shadow);-webkit-backdrop-filter:blur(32px) saturate(185%) contrast(1.03);backdrop-filter:blur(32px) saturate(185%) contrast(1.03)}
+.journey-card{border-color:rgba(255,255,255,.82);background:linear-gradient(145deg,rgba(255,255,255,.62),rgba(230,239,255,.3));box-shadow:inset 0 1px 0 rgba(255,255,255,.92)}
+.journey-card:hover{border-color:#fff;background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(225,237,255,.4))}
+.journey-card time,.journey-card h3{color:var(--ink)}
+.journey-card>p,.journey-footer{color:var(--ink-soft)}
+.journey-card-meta span,.journey-current{color:var(--blue)}
+.journey-card.is-current{background:radial-gradient(circle at 78% 8%,rgba(121,166,255,.22),transparent 34%),linear-gradient(145deg,#123f8d,#071f58);border-color:rgba(255,255,255,.72)}
+.journey-card.is-current time,.journey-card.is-current h3{color:#fff}
+.journey-card.is-current>p{color:#dbe7ff}
+.journey-card.is-current .journey-card-meta span,.journey-card.is-current .journey-current{color:#c7d9ff}
+
+.support-offers h3,.specialist-roles strong,.case-note-grid h3{color:var(--ink)}
+.case-note-grid article:not(:first-child),.service-facts div,.review-standard li,.sample-quote,.purchase-rules,.accountability-list article,.payment-summary,.faq-page details,.service-summary-cards article,.data-lifecycle,.pricing-terms,.form-details,.upload-privacy-note{border-color:var(--glass-border);background:linear-gradient(135deg,rgba(255,255,255,.62),rgba(221,234,255,.18)),rgba(255,255,255,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 16px 40px rgba(24,62,128,.07);-webkit-backdrop-filter:blur(28px) saturate(175%);backdrop-filter:blur(28px) saturate(175%)}
+.case-note-grid article:first-child{background:#071f58}
+.case-note-grid article:first-child::after{background:linear-gradient(180deg,rgba(5,23,62,.02) 0%,rgba(5,23,62,.18) 40%,rgba(5,23,62,.9) 70%,#071f58 100%)}
+.case-note-grid article:first-child h3{color:#fff}
+.case-note-grid article:first-child dd{color:#d7e3f7}
+
+.contact-copy h2,.operator-identity dd,.operator-identity a,.contact-channel-value,.form-field label,.form-details>summary,.upload-privacy-note strong,.pricing-terms strong,.pricing-terms a{color:var(--ink)}
+.contact-channel .contact-channel-value{color:var(--ink)!important;font-weight:780}
+.contact-copy>p:not(.eyebrow),.upload-privacy-note p,.pricing-terms span,.form-details>summary span,.consent-field{color:var(--ink-soft)}
+.consent-field input{accent-color:var(--navy-900)}
+.contact-channel-icon img{filter:brightness(0) saturate(100%) invert(22%) sepia(66%) saturate(2370%) hue-rotate(211deg) brightness(78%) contrast(96%)!important}
+.contact-email-icon{color:var(--navy-900)}
+.form-field input,.form-field select,.form-field textarea{color:var(--ink)!important}
+.form-field input::placeholder,.form-field textarea::placeholder,.form-field select:invalid{color:#6c7a90!important}
+.form-field select option{color:var(--ink);background:#fff}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:rgba(22,74,166,.48)!important;box-shadow:0 0 0 4px rgba(22,74,166,.1)!important}
+.form-privacy-link a,.form-email-fallback,.policy-content a,.faq-page a{color:var(--navy-900)}
+.form-status.is-success{border-color:rgba(30,122,73,.3);background:rgba(225,248,234,.72);color:#165c38}
+.form-status.is-error{border-color:rgba(171,47,61,.25);background:rgba(255,236,239,.72);color:#8b2431}
+
+.quick-consult-copy>p:not(.eyebrow),.quick-consult-action span,.quick-consult-action small{color:var(--ink-soft)}
+.quick-contact-links,.quick-consult-action strong{color:var(--ink)}
+.quick-consult-action{border-color:var(--line)}
+.service-summary-table{color:var(--ink)}
+.service-summary-table thead th{color:var(--blue)}
+.service-summary-table tbody th{color:var(--ink)}
+.service-summary-table tbody td:nth-child(2){color:var(--ink-soft)}
+.service-summary-table tbody tr:hover{background:rgba(22,74,166,.045)}
+.service-summary-cards strong,.service-summary-cards b{color:var(--ink)}
+.service-summary-cards span{color:var(--blue)}
+.service-summary-cards p{color:var(--ink-soft)}
+
+.service-detail-row dd,.review-standard strong,.payment-summary strong,.policy-page .policy-content h3,.faq-page summary,.sample-quote dd,.purchase-rules>strong,.accountability-list h3,.data-lifecycle strong{color:var(--ink)}
+.policy-summary-copy strong,.policy-content h4{color:var(--ink)}
+.policy-summary-copy small{color:var(--ink-soft)}
+.policy-disclosure summary{color:var(--ink)}
+.policy-disclosure[open] .policy-number{border-color:rgba(22,74,166,.22);background:rgba(22,74,166,.06);color:var(--navy-900)}
+.policy-disclosure[open] summary::after{border-color:rgba(22,74,166,.28);background:rgba(22,74,166,.07);color:var(--navy-900)}
+.policy-disclosure,.policy-disclosure[open],.policy-disclosure:not([open]):hover{border-color:var(--glass-border);background:linear-gradient(135deg,rgba(255,255,255,.64),rgba(221,234,255,.2)),rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 16px 40px rgba(24,62,128,.07);-webkit-backdrop-filter:blur(30px) saturate(178%);backdrop-filter:blur(30px) saturate(178%)}
+.data-lifecycle-head{background:rgba(22,74,166,.07)}
+
+.site-footer::after{background:linear-gradient(90deg,transparent,rgba(22,74,166,.24),transparent)}
+.footer-links{color:var(--ink)}
+
+/* Web approximation of a more transparent, browser-like liquid glass surface. */
+.nav-cta,.hero-media-caption,.contact-channel,.contact-channel-icon,.service-feature,.service-cta,.quick-consult-section,.final-cta,.form-field input,.form-field select,.form-field textarea{
+  border-color:var(--glass-border)!important;
+  background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.88),transparent 43%),linear-gradient(118deg,rgba(255,255,255,.48),rgba(255,255,255,.10) 48%,rgba(139,180,246,.12)),var(--glass)!important;
+  box-shadow:var(--glass-shadow)!important;
+  -webkit-backdrop-filter:blur(32px) saturate(185%) contrast(1.03)!important;
+  backdrop-filter:blur(32px) saturate(185%) contrast(1.03)!important;
+}
+.contact-channel{grid-template-columns:46px minmax(0,1fr);gap:16px;min-height:76px;padding:14px 18px}
+.contact-channel-icon{width:46px;height:46px}
+.contact-channel-copy{overflow:hidden}
+.contact-channel .contact-channel-label{margin-bottom:4px;font-size:11px;line-height:1.25}
+.contact-channel .contact-channel-value{overflow-wrap:anywhere;font-size:17px;line-height:1.35}
+.contact-channel:focus-visible{outline:3px solid rgba(22,74,166,.3);outline-offset:3px}
+@media(max-width:560px){.contact-channel[href^="mailto:"] .contact-channel-value{font-size:15px;letter-spacing:-.015em}}
+@media(max-width:360px){.hero h1{font-size:clamp(2.95rem,15vw,3.15rem);line-height:.92;letter-spacing:-.07em}}
+.hero-media-caption::before{background:transparent!important;filter:none!important}
+.service-feature,.service-cta,.quick-consult-section{color:var(--ink)}
+
+/* Deep royal blue is reserved for the strongest editorial and conversion moments. */
+.editorial-block,.final-cta{border-color:rgba(255,255,255,.58);background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.16),transparent 34%),linear-gradient(125deg,rgba(18,63,141,.96),rgba(7,31,88,.97))!important;box-shadow:0 26px 70px rgba(8,42,114,.18)!important}
+.editorial-block h2,.editorial-block .editorial-quote,.final-cta h2{color:#fff}
+.editorial-block p,.final-cta p{color:#d8e5fb}
+.final-cta .button-primary{background:#fff;color:var(--navy-900)}
+
+@media(prefers-reduced-transparency:reduce){
+  .nav-cta,.hero-media-caption,.contact-channel,.contact-channel-icon,.service-feature,.service-cta,.quick-consult-section,.final-cta,.form-field input,.form-field select,.form-field textarea,.journey-carousel,.journey-control,.case-note-grid article:not(:first-child),.service-facts div,.review-standard li,.sample-quote,.purchase-rules,.accountability-list article,.payment-summary,.policy-disclosure,.faq-page details,.service-summary-cards article,.data-lifecycle,.pricing-terms,.form-details,.upload-privacy-note{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .editorial-block,.final-cta{background:#082a72!important}
+}

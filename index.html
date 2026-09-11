@@ -17,7 +17,7 @@
     <meta name="twitter:title" content="Aplus Scholar | Đồng hành cùng hành trình học thuật" />
     <meta name="twitter:description" content="Hỗ trợ phương pháp, dữ liệu và cách trình bày nghiên cứu có trách nhiệm." />
     <meta name="twitter:image" content="https://aplus-scholar.vercel.app/assets/hero-library.png" />
-    <link rel="stylesheet" href="styles.css?v=20260903a" />
+    <link rel="stylesheet" href="styles.css?v=20260911-strict" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -89,7 +89,7 @@
             values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  .82 .82 .82 0 -.58"
           />
           <feMorphology in="keyed-logo" operator="dilate" radius="1.6" result="crisp-logo" />
-          <feFlood flood-color="#ffffff" result="logo-white" />
+          <feFlood flood-color="#082a72" result="logo-white" />
           <feComposite in="logo-white" in2="crisp-logo" operator="in" />
         </filter>
         <filter id="academic-line-key" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
@@ -101,13 +101,13 @@
           />
           <feComposite in="academic-lines" in2="SourceGraphic" operator="in" result="academic-keyed" />
           <feMorphology in="academic-keyed" operator="dilate" radius=".7" result="academic-crisp" />
-          <feFlood flood-color="#dbe7ff" result="academic-white" />
+          <feFlood flood-color="#164aa6" result="academic-white" />
           <feComposite in="academic-white" in2="academic-crisp" operator="in" />
         </filter>
         <clipPath id="logo-wordmark-crop" clipPathUnits="userSpaceOnUse">
           <rect x="180" y="500" width="900" height="345" />
           <rect x="180" y="448" width="350" height="52" />
-          <rect x="730" y="465" width="75" height="35" />
+          <rect x="680" y="448" width="130" height="52" />
         </clipPath>
       </defs>
     </svg>

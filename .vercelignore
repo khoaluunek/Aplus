@@ -1,2 +1,12 @@
 *.docx
 *.xlsx
+*.py
+.doc-review/
+.docx_qa/
+.tmp/
+.tmp_feedback_render/
+aplus-image-redesign/
+node_modules/
+qa_aplus_review/
+qa_docx/
+tests/
