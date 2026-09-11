@@ -41,13 +41,20 @@ async function saveToSupabase(record) {
     },
     body: JSON.stringify(record)
   });
-  if (!result.ok) throw new Error("SUPABASE_INSERT_FAILED");
+  if (!result.ok) {
+    let detail = "unknown error";
+    try {
+      const payload = await result.json();
+      detail = cleanText(payload.message || payload.hint || payload.code || detail, 180);
+    } catch {}
+    throw new Error(`SUPABASE_INSERT_FAILED: ${result.status} ${detail}`);
+  }
 }
 
 async function updateTelegramStatus(requestId, status) {
   const config = getSupabaseConfig();
   if (!config) return;
-  await fetch(`${config.url}/rest/v1/consultation_requests?request_id=eq.${encodeURIComponent(requestId)}`, {
+  const result = await fetch(`${config.url}/rest/v1/consultation_requests?request_id=eq.${encodeURIComponent(requestId)}`, {
     method: "PATCH",
     headers: {
       apikey: config.key,
@@ -57,6 +64,7 @@ async function updateTelegramStatus(requestId, status) {
     },
     body: JSON.stringify({ telegram_status: status })
   });
+  if (!result.ok) throw new Error(`SUPABASE_STATUS_UPDATE_FAILED: ${result.status}`);
 }
 
 async function notifyTelegram(message) {
@@ -229,7 +237,11 @@ async function consultationHandler(request, response) {
       status: "received",
       telegram_status: "pending"
     });
-  } catch {
+  } catch (error) {
+    console.error("[consultation] Supabase insert failed", {
+      requestId,
+      error: cleanText(error?.message || "Unknown Supabase error", 240)
+    });
     return sendJson(response, 502, { message: "Không thể lưu yêu cầu lúc này. Vui lòng thử lại sau ít phút." });
   }
 
@@ -253,6 +265,7 @@ async function consultationHandler(request, response) {
   } catch (error) {
     // Keep the saved request available even if Telegram is temporarily unavailable.
     const detail = String(error?.message || "Telegram error").replace(/^TELEGRAM_SEND_FAILED:\s*/i, "").slice(0, 180);
+    console.warn("[consultation] Telegram notification failed", { requestId, error: detail });
     await updateTelegramStatus(requestId, `failed: ${detail}`).catch(() => {});
   }
 
@@ -277,11 +290,16 @@ async function consultationHandler(request, response) {
         attachments: emailAttachment ? [emailAttachment] : undefined
       })
     });
-  } catch {
+  } catch (error) {
+    console.error("[consultation] Resend request failed", {
+      requestId,
+      error: cleanText(error?.message || "Unknown Resend error", 240)
+    });
     return sendJson(response, 502, { message: "Kênh gửi thư đang gián đoạn. Vui lòng dùng email dự phòng." });
   }
 
   if (!resendResponse.ok) {
+    console.error("[consultation] Resend rejected request", { requestId, status: resendResponse.status });
     return sendJson(response, 502, { message: "Hệ thống gửi thư chưa phản hồi. Vui lòng dùng email dự phòng." });
   }
 

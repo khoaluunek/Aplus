@@ -2,6 +2,18 @@ const assert = require("node:assert/strict");
 const { Readable } = require("node:stream");
 const consultationHandler = require("../api/consultation");
 
+process.env.SUPABASE_URL = "https://test-project.supabase.co";
+process.env.SUPABASE_SECRET_KEY = "sb_secret_test";
+process.env.TELEGRAM_BOT_TOKEN = "123456:test-token";
+process.env.TELEGRAM_CHAT_ID = "-1001234567890";
+delete process.env.RESEND_API_KEY;
+
+const fetchCalls = [];
+global.fetch = async (url, options = {}) => {
+  fetchCalls.push({ url: String(url), method: options.method });
+  return { ok: true, status: 200, json: async () => ({ ok: true }) };
+};
+
 function multipartBody(fields, file) {
   const boundary = "----AplusScholarBoundary";
   const chunks = [];
@@ -50,8 +62,11 @@ const baseFields = {
 };
 
 (async () => {
+  fetchCalls.length = 0;
   const validContact = await submit(baseFields);
-  assert.equal(validContact.statusCode, 503, "Valid multipart request should reach email configuration check");
+  assert.equal(validContact.statusCode, 200, "Valid multipart request should be accepted");
+  assert.ok(fetchCalls.some((call) => call.url.includes("/rest/v1/consultation_requests")), "Accepted request should be saved");
+  assert.ok(fetchCalls.some((call) => call.url.includes("api.telegram.org")), "Accepted request should notify Telegram");
 
   const missingPhone = await submit({ ...baseFields, contactMethod: "phone", email: "" });
   assert.equal(missingPhone.statusCode, 400, "Phone channel requires a valid phone number");
@@ -68,7 +83,16 @@ const baseFields = {
     type: "application/pdf",
     content: Buffer.from("%PDF-1.4\n%%EOF")
   });
-  assert.equal(signedPdf.statusCode, 503, "Signed PDF should pass validation and reach email configuration check");
+  assert.equal(signedPdf.statusCode, 200, "Signed PDF should pass validation and be accepted");
+
+  fetchCalls.length = 0;
+  global.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url: String(url), method: options.method });
+    return { ok: false, status: 503, json: async () => ({ message: "Project is paused" }) };
+  };
+  const pausedDatabase = await submit(baseFields);
+  assert.equal(pausedDatabase.statusCode, 502, "Unavailable storage should return the retryable form error");
+  assert.ok(!fetchCalls.some((call) => call.url.includes("api.telegram.org")), "Telegram is not reached when storage fails first");
 
   console.log("consultation multipart tests passed");
 })().catch((error) => {
