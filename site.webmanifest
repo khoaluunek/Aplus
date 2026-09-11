@@ -1,0 +1,13 @@
+{
+  "name": "Aplus Scholar",
+  "short_name": "Aplus Scholar",
+  "description": "Hỗ trợ học thuật có trách nhiệm.",
+  "lang": "vi-VN",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f8fbff",
+  "theme_color": "#061a46",
+  "icons": [
+    { "src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

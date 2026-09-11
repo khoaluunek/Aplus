@@ -1,7 +1,22 @@
 const Busboy = require("busboy");
 const { randomUUID } = require("node:crypto");
+const {
+  addDays,
+  cleanText,
+  consumeRateLimit,
+  deletePrivateFile,
+  getExistingRequest,
+  getStorageBucket,
+  insertLifecycleEvent,
+  insertRequest,
+  newRequestId,
+  uploadPrivateFile,
+  verifyTurnstile
+} = require("./_lib/supabase");
+const { deliverNotifications } = require("./_lib/notifications");
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
+const CONSENT_VERSION = "2026-09-11";
 const allowedFileTypes = new Map([
   ["pdf", new Set(["application/pdf", "application/octet-stream"])],
   ["doc", new Set(["application/msword", "application/octet-stream"])],
@@ -12,78 +27,6 @@ function sendJson(response, status, payload) {
   response.setHeader("Cache-Control", "no-store");
   response.setHeader("Content-Type", "application/json; charset=utf-8");
   response.status(status).json(payload);
-}
-
-function cleanText(value, maximumLength) {
-  return String(value || "").trim().replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").slice(0, maximumLength);
-}
-
-function escapeHtml(value) {
-  return value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" })[character]);
-}
-
-function getSupabaseConfig() {
-  const url = String(process.env.SUPABASE_URL || "").trim().replace(/\/$/, "");
-  const key = String(process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
-  return url && key ? { url, key } : null;
-}
-
-async function saveToSupabase(record) {
-  const config = getSupabaseConfig();
-  if (!config) throw new Error("SUPABASE_NOT_CONFIGURED");
-  const result = await fetch(`${config.url}/rest/v1/consultation_requests`, {
-    method: "POST",
-    headers: {
-      apikey: config.key,
-      Authorization: `Bearer ${config.key}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal"
-    },
-    body: JSON.stringify(record)
-  });
-  if (!result.ok) {
-    let detail = "unknown error";
-    try {
-      const payload = await result.json();
-      detail = cleanText(payload.message || payload.hint || payload.code || detail, 180);
-    } catch {}
-    throw new Error(`SUPABASE_INSERT_FAILED: ${result.status} ${detail}`);
-  }
-}
-
-async function updateTelegramStatus(requestId, status) {
-  const config = getSupabaseConfig();
-  if (!config) return;
-  const result = await fetch(`${config.url}/rest/v1/consultation_requests?request_id=eq.${encodeURIComponent(requestId)}`, {
-    method: "PATCH",
-    headers: {
-      apikey: config.key,
-      Authorization: `Bearer ${config.key}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal"
-    },
-    body: JSON.stringify({ telegram_status: status })
-  });
-  if (!result.ok) throw new Error(`SUPABASE_STATUS_UPDATE_FAILED: ${result.status}`);
-}
-
-async function notifyTelegram(message) {
-  const token = String(process.env.TELEGRAM_BOT_TOKEN || "").trim();
-  const chatId = String(process.env.TELEGRAM_CHAT_ID || "").trim();
-  if (!token || !chatId) throw new Error("TELEGRAM_NOT_CONFIGURED");
-  const result = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chatId, text: message, disable_web_page_preview: true })
-  });
-  if (!result.ok) {
-    let detail = "unknown error";
-    try {
-      const payload = await result.json();
-      detail = String(payload.description || detail).replace(/[\r\n]/g, " ").slice(0, 180);
-    } catch {}
-    throw new Error(`TELEGRAM_SEND_FAILED: ${detail}`);
-  }
 }
 
 function isAllowedOrigin(origin) {
@@ -97,6 +40,13 @@ function isAllowedOrigin(origin) {
   } catch {
     return false;
   }
+}
+
+function normalizeVietnamPhone(value) {
+  let phone = cleanText(value, 32).replace(/[\s().-]/g, "");
+  if (phone.startsWith("+84")) phone = `0${phone.slice(3)}`;
+  else if (phone.startsWith("84") && phone.length === 11) phone = `0${phone.slice(2)}`;
+  return phone;
 }
 
 function hasSignature(buffer, extension) {
@@ -117,22 +67,19 @@ function parseMultipartRequest(request) {
     try {
       parser = Busboy({
         headers: request.headers,
-        limits: { fieldNameSize: 80, fieldSize: 4000, fields: 12, fileSize: MAX_FILE_SIZE, files: 1, parts: 13 }
+        limits: { fieldNameSize: 80, fieldSize: 4000, fields: 16, fileSize: MAX_FILE_SIZE, files: 1, parts: 17 }
       });
     } catch {
       reject(new Error("INVALID_MULTIPART"));
       return;
     }
-
     const fields = {};
     let attachment = null;
     let uploadError = "";
-
     parser.on("field", (name, value, info) => {
       if (info.nameTruncated || info.valueTruncated) uploadError = "INVALID_FIELDS";
       fields[name] = value;
     });
-
     parser.on("file", (name, stream, info) => {
       if (name !== "brief-file" || !info.filename) {
         stream.resume();
@@ -150,7 +97,6 @@ function parseMultipartRequest(request) {
         };
       });
     });
-
     parser.on("filesLimit", () => { uploadError = "TOO_MANY_FILES"; });
     parser.on("partsLimit", () => { uploadError = "TOO_MANY_PARTS"; });
     parser.on("error", () => reject(new Error("INVALID_MULTIPART")));
@@ -159,53 +105,74 @@ function parseMultipartRequest(request) {
   });
 }
 
+function validIdempotencyKey(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
 async function consultationHandler(request, response) {
   if (request.method !== "POST") {
     response.setHeader("Allow", "POST");
     return sendJson(response, 405, { message: "Phương thức không được hỗ trợ." });
   }
-
-  if (!isAllowedOrigin(request.headers.origin)) {
-    return sendJson(response, 403, { message: "Nguồn gửi yêu cầu không hợp lệ." });
-  }
-
+  if (!isAllowedOrigin(request.headers.origin)) return sendJson(response, 403, { message: "Nguồn gửi yêu cầu không hợp lệ." });
   if (!String(request.headers["content-type"] || "").toLowerCase().startsWith("multipart/form-data")) {
     return sendJson(response, 415, { message: "Biểu mẫu cần được gửi theo định dạng multipart/form-data." });
   }
 
   let parsed;
-  try {
-    parsed = await parseMultipartRequest(request);
-  } catch {
-    return sendJson(response, 400, { message: "Dữ liệu biểu mẫu không hợp lệ." });
-  }
+  try { parsed = await parseMultipartRequest(request); }
+  catch { return sendJson(response, 400, { message: "Dữ liệu biểu mẫu không hợp lệ." }); }
 
   const body = parsed.fields;
-  if (cleanText(body.website, 200)) {
-    return sendJson(response, 200, { requestId: `AP-${randomUUID().slice(0, 8).toUpperCase()}` });
-  }
+  if (cleanText(body.website, 200)) return sendJson(response, 200, { requestId: newRequestId(), accepted: true });
   if (parsed.uploadError) {
     return sendJson(response, 400, { message: parsed.uploadError === "FILE_TOO_LARGE" ? "Tệp đính kèm vượt quá 3 MB." : "Tệp hoặc dữ liệu biểu mẫu không hợp lệ." });
   }
 
   const name = cleanText(body.name, 100);
-  const phone = cleanText(body.phone, 20).replace(/\s/g, "");
-  const email = cleanText(body.email, 160);
+  const phone = normalizeVietnamPhone(body.phone);
+  const email = cleanText(body.email, 160).toLowerCase();
   const contactMethod = cleanText(body.contactMethod, 20);
   const contactTime = cleanText(body.contactTime, 80);
   const need = cleanText(body.need, 120);
   const message = cleanText(body.message, 4000);
   const consent = cleanText(body.consent, 20);
+  const idempotencyKey = validIdempotencyKey(cleanText(body.idempotencyKey, 50)) ? cleanText(body.idempotencyKey, 50) : randomUUID();
   const validEmail = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validPhone = !phone || /^0\d{9}$/.test(phone);
   const validContactMethod = ["phone", "zalo", "email"].includes(contactMethod);
   const hasSelectedContact = contactMethod === "email" ? Boolean(email) : Boolean(phone);
-
-  if (!name || !need || !consent || !validContactMethod || !hasSelectedContact || !validEmail || !validPhone) {
+  if (!name || !need || !["on", "true"].includes(consent) || !validContactMethod || !hasSelectedContact || !validEmail || !validPhone) {
     return sendJson(response, 400, { message: "Thông tin liên hệ chưa hợp lệ. Vui lòng kiểm tra lại." });
   }
+  try {
+    const turnstileValid = await verifyTurnstile(cleanText(body.turnstileToken, 4096), request);
+    if (!turnstileValid) return sendJson(response, 403, { message: "Không thể xác minh biểu mẫu. Vui lòng thử lại hoặc liên hệ qua Zalo." });
+  } catch (error) {
+    console.error("[consultation] Turnstile unavailable", { error: cleanText(error.message, 160) });
+    return sendJson(response, 503, { message: "Hệ thống xác minh đang bận. Vui lòng thử lại sau ít phút." });
+  }
+  if (parsed.attachment && !getStorageBucket()) {
+    return sendJson(response, 503, { message: "Tính năng tải tệp đang tạm đóng để bảo đảm lưu trữ riêng tư. Vui lòng gửi yêu cầu không kèm tệp hoặc liên hệ qua Zalo/email." });
+  }
 
-  let emailAttachment;
+  try {
+    const allowed = await consumeRateLimit(request, "consultation", 5, 60 * 60);
+    if (!allowed) return sendJson(response, 429, { message: "Bạn đã gửi nhiều yêu cầu trong thời gian ngắn. Vui lòng thử lại sau 1 giờ hoặc liên hệ qua Zalo." });
+  } catch (error) {
+    console.error("[consultation] Rate limit unavailable", { error: cleanText(error.message, 160) });
+    return sendJson(response, 503, { message: "Hệ thống tiếp nhận đang được bảo vệ. Vui lòng thử lại sau ít phút." });
+  }
+
+  try {
+    const existing = await getExistingRequest(idempotencyKey);
+    if (existing) return sendJson(response, 200, { requestId: existing.request_id, accepted: true, duplicate: true });
+  } catch (error) {
+    console.error("[consultation] Unable to check idempotency", { error: cleanText(error.message, 160) });
+    return sendJson(response, 502, { message: "Không thể xác nhận yêu cầu lúc này. Vui lòng thử lại sau ít phút." });
+  }
+
+  let attachment = null;
   if (parsed.attachment) {
     const extensionMatch = parsed.attachment.name.match(/\.([a-z0-9]+)$/i);
     const extension = extensionMatch ? extensionMatch[1].toLowerCase() : "";
@@ -213,97 +180,61 @@ async function consultationHandler(request, response) {
     if (!acceptedMimeTypes || !acceptedMimeTypes.has(parsed.attachment.type) || !hasSignature(parsed.attachment.buffer, extension)) {
       return sendJson(response, 400, { message: "Tệp không khớp định dạng PDF, DOC hoặc DOCX được hỗ trợ." });
     }
-    emailAttachment = { filename: parsed.attachment.name, content: parsed.attachment.buffer.toString("base64") };
+    attachment = { ...parsed.attachment, extension };
   }
 
-  const requestId = `AP-${randomUUID().slice(0, 8).toUpperCase()}`;
-  const contactLabels = { phone: "Gọi điện", zalo: "Zalo", email: "Email" };
-  const submittedAt = new Intl.DateTimeFormat("vi-VN", { dateStyle: "full", timeStyle: "short", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
-  const safeMessage = escapeHtml(message || "Chưa cung cấp").replace(/\n/g, "<br />");
+  const requestId = newRequestId();
+  const receivedAt = new Date();
+  let attachmentBucket = null;
+  let attachmentPath = null;
+  if (attachment) {
+    attachmentPath = `consultations/${receivedAt.getUTCFullYear()}/${requestId}.${attachment.extension}`;
+    try {
+      attachmentBucket = await uploadPrivateFile({ path: attachmentPath, buffer: attachment.buffer, contentType: attachment.type });
+    } catch (error) {
+      console.error("[consultation] Private upload failed", { requestId, error: cleanText(error.message, 160) });
+      return sendJson(response, 503, { message: "Không thể lưu tệp riêng tư lúc này. Yêu cầu chưa được gửi; vui lòng thử lại sau hoặc gửi không kèm tệp." });
+    }
+  }
 
+  const record = {
+    request_id: requestId,
+    idempotency_key: idempotencyKey,
+    name,
+    phone: phone || null,
+    email: email || null,
+    contact_method: contactMethod,
+    contact_time: contactTime || null,
+    need,
+    message: message || null,
+    attachment_name: attachment?.name || null,
+    attachment_size: attachment?.buffer.length || null,
+    attachment_bucket: attachmentBucket,
+    attachment_path: attachmentPath,
+    attachment_retention_until: attachment ? addDays(receivedAt, 30) : null,
+    consent_at: receivedAt.toISOString(),
+    consent_version: CONSENT_VERSION,
+    retention_until: addDays(receivedAt, 30),
+    status: "received",
+    telegram_status: process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID ? "pending" : "not_configured",
+    email_status: process.env.RESEND_API_KEY ? "pending" : "not_configured",
+    notification_attempts: { telegram: 0, email: 0 }
+  };
   try {
-    await saveToSupabase({
-      request_id: requestId,
-      name,
-      phone: phone || null,
-      email: email || null,
-      contact_method: contactMethod,
-      contact_time: contactTime || null,
-      need,
-      message: message || null,
-      attachment_name: parsed.attachment?.name || null,
-      attachment_size: parsed.attachment?.buffer.length || null,
-      consent_at: new Date().toISOString(),
-      status: "received",
-      telegram_status: "pending"
-    });
+    await insertRequest(record);
   } catch (error) {
-    console.error("[consultation] Supabase insert failed", {
-      requestId,
-      error: cleanText(error?.message || "Unknown Supabase error", 240)
-    });
+    if (attachmentBucket && attachmentPath) await deletePrivateFile(attachmentBucket, attachmentPath).catch(() => {});
+    try {
+      const existing = await getExistingRequest(idempotencyKey);
+      if (existing) return sendJson(response, 200, { requestId: existing.request_id, accepted: true, duplicate: true });
+    } catch {}
+    console.error("[consultation] Supabase insert failed", { requestId, error: cleanText(error.message, 180) });
     return sendJson(response, 502, { message: "Không thể lưu yêu cầu lúc này. Vui lòng thử lại sau ít phút." });
   }
 
-  const telegramMessage = [
-    `📩 YÊU CẦU TƯ VẤN MỚI · ${requestId}`,
-    `Họ tên: ${name}`,
-    `Kênh phản hồi: ${contactLabels[contactMethod]}`,
-    `Số điện thoại: ${phone || "Không cung cấp"}`,
-    `Email: ${email || "Không cung cấp"}`,
-    `Khung giờ: ${contactTime || "Không yêu cầu"}`,
-    `Nhu cầu: ${need}`,
-    `Tệp đính kèm: ${parsed.attachment?.name || "Không có"}`,
-    `Thời gian: ${submittedAt}`,
-    "",
-    `Nội dung: ${message || "Chưa cung cấp"}`
-  ].join("\n").slice(0, 3900);
-
-  try {
-    await notifyTelegram(telegramMessage);
-    await updateTelegramStatus(requestId, "sent");
-  } catch (error) {
-    // Keep the saved request available even if Telegram is temporarily unavailable.
-    const detail = String(error?.message || "Telegram error").replace(/^TELEGRAM_SEND_FAILED:\s*/i, "").slice(0, 180);
-    console.warn("[consultation] Telegram notification failed", { requestId, error: detail });
-    await updateTelegramStatus(requestId, `failed: ${detail}`).catch(() => {});
-  }
-
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const consultationInbox = process.env.CONSULTATION_INBOX || "aplusscholarr@gmail.com";
-  const consultationFrom = process.env.CONSULTATION_FROM || "Aplus Scholar <onboarding@resend.dev>";
-  if (!resendApiKey) {
-    return sendJson(response, 200, { requestId, receivedAt: new Date().toISOString() });
-  }
-
-  let resendResponse;
-  try {
-    resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: consultationFrom,
-        to: [consultationInbox],
-        reply_to: email || undefined,
-        subject: `[${requestId}] Yêu cầu tư vấn: ${need}`,
-        html: `<h2>Yêu cầu tư vấn mới ${requestId}</h2><p><strong>Họ tên:</strong> ${escapeHtml(name)}</p><p><strong>Kênh phản hồi:</strong> ${contactLabels[contactMethod]}</p><p><strong>Số điện thoại:</strong> ${escapeHtml(phone || "Không cung cấp")}</p><p><strong>Email:</strong> ${escapeHtml(email || "Không cung cấp")}</p><p><strong>Khung giờ:</strong> ${escapeHtml(contactTime || "Không yêu cầu")}</p><p><strong>Nhu cầu:</strong> ${escapeHtml(need)}</p><p><strong>Thời gian gửi:</strong> ${escapeHtml(submittedAt)}</p><hr /><p><strong>Nội dung trao đổi</strong></p><p>${safeMessage}</p>`,
-        attachments: emailAttachment ? [emailAttachment] : undefined
-      })
-    });
-  } catch (error) {
-    console.error("[consultation] Resend request failed", {
-      requestId,
-      error: cleanText(error?.message || "Unknown Resend error", 240)
-    });
-    return sendJson(response, 502, { message: "Kênh gửi thư đang gián đoạn. Vui lòng dùng email dự phòng." });
-  }
-
-  if (!resendResponse.ok) {
-    console.error("[consultation] Resend rejected request", { requestId, status: resendResponse.status });
-    return sendJson(response, 502, { message: "Hệ thống gửi thư chưa phản hồi. Vui lòng dùng email dự phòng." });
-  }
-
-  return sendJson(response, 200, { requestId, receivedAt: new Date().toISOString() });
+  await insertLifecycleEvent({ requestId, eventType: "request_received", metadata: { hasAttachment: Boolean(attachment), consentVersion: CONSENT_VERSION } });
+  await deliverNotifications(record);
+  return sendJson(response, 200, { requestId, accepted: true, receivedAt: receivedAt.toISOString() });
 }
 
 module.exports = consultationHandler;

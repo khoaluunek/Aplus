@@ -6,11 +6,18 @@ process.env.SUPABASE_URL = "https://test-project.supabase.co";
 process.env.SUPABASE_SECRET_KEY = "sb_secret_test";
 process.env.TELEGRAM_BOT_TOKEN = "123456:test-token";
 process.env.TELEGRAM_CHAT_ID = "-1001234567890";
+process.env.SUPABASE_STORAGE_BUCKET = "consultation-files";
+process.env.RATE_LIMIT_SECRET = "test-rate-limit-secret";
 delete process.env.RESEND_API_KEY;
+delete process.env.TURNSTILE_SITE_KEY;
+delete process.env.TURNSTILE_SECRET_KEY;
+delete process.env.TURNSTILE_REQUIRED;
 
 const fetchCalls = [];
 global.fetch = async (url, options = {}) => {
   fetchCalls.push({ url: String(url), method: options.method });
+  if (String(url).includes("/rpc/consume_consultation_rate_limit")) return { ok: true, status: 200, json: async () => true };
+  if (String(url).includes("idempotency_key=eq.")) return { ok: true, status: 200, json: async () => [] };
   return { ok: true, status: 200, json: async () => ({ ok: true }) };
 };
 
@@ -84,6 +91,18 @@ const baseFields = {
     content: Buffer.from("%PDF-1.4\n%%EOF")
   });
   assert.equal(signedPdf.statusCode, 200, "Signed PDF should pass validation and be accepted");
+  assert.ok(fetchCalls.some((call) => call.url.includes("/storage/v1/object/consultation-files/")), "Accepted files should be uploaded to private Storage");
+
+  fetchCalls.length = 0;
+  global.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url: String(url), method: options.method });
+    if (String(url).includes("/rpc/consume_consultation_rate_limit")) return { ok: true, status: 200, json: async () => true };
+    if (String(url).includes("idempotency_key=eq.")) return { ok: true, status: 200, json: async () => [] };
+    if (String(url).includes("api.telegram.org")) return { ok: false, status: 503, json: async () => ({ description: "Unavailable" }) };
+    return { ok: true, status: 200, json: async () => ({ ok: true }) };
+  };
+  const unavailableTelegram = await submit(baseFields);
+  assert.equal(unavailableTelegram.statusCode, 200, "Notification failure must not make an already-saved request fail");
 
   fetchCalls.length = 0;
   global.fetch = async (url, options = {}) => {
@@ -91,7 +110,7 @@ const baseFields = {
     return { ok: false, status: 503, json: async () => ({ message: "Project is paused" }) };
   };
   const pausedDatabase = await submit(baseFields);
-  assert.equal(pausedDatabase.statusCode, 502, "Unavailable storage should return the retryable form error");
+  assert.equal(pausedDatabase.statusCode, 503, "Unavailable rate protection should return a safe retryable form error");
   assert.ok(!fetchCalls.some((call) => call.url.includes("api.telegram.org")), "Telegram is not reached when storage fails first");
 
   console.log("consultation multipart tests passed");
