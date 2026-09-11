@@ -575,16 +575,16 @@
   --blue-soft:#315fb3;
   --white:#f8faff;
   --muted:#52627a;
-  --line:rgba(8,42,114,.14);
-  --shadow:0 24px 68px rgba(20,57,122,.14);
+  --line:rgba(8,42,114,.19);
+  --shadow:0 24px 68px rgba(8,42,114,.17);
   --paper:#ffffff;
   --paper-blue:#f4f8ff;
   --ink:#071f58;
   --ink-soft:#52627a;
-  --glass:rgba(255,255,255,.42);
-  --glass-strong:rgba(255,255,255,.58);
-  --glass-border:rgba(255,255,255,.82);
-  --glass-shadow:inset 0 1px 0 rgba(255,255,255,.94),inset 0 -1px 0 rgba(22,74,166,.08),0 20px 52px rgba(24,62,128,.11);
+  --glass:rgba(231,240,255,.62);
+  --glass-strong:rgba(238,245,255,.76);
+  --glass-border:rgba(8,42,114,.2);
+  --glass-shadow:inset 0 1px 0 rgba(255,255,255,.98),inset 0 -1px 0 rgba(8,42,114,.13),0 18px 46px rgba(8,42,114,.15),0 2px 8px rgba(8,42,114,.08);
 }
 
 body{background:var(--paper);color:var(--ink)}
@@ -727,5 +727,48 @@ h1,h2,h3{color:var(--ink)}
 
 @media(prefers-reduced-transparency:reduce){
   .nav-cta,.hero-media-caption,.contact-channel,.contact-channel-icon,.service-feature,.service-cta,.quick-consult-section,.final-cta,.form-field input,.form-field select,.form-field textarea,.journey-carousel,.journey-control,.case-note-grid article:not(:first-child),.service-facts div,.review-standard li,.sample-quote,.purchase-rules,.accountability-list article,.payment-summary,.policy-disclosure,.faq-page details,.service-summary-cards article,.data-lifecycle,.pricing-terms,.form-details,.upload-privacy-note{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .editorial-block,.final-cta{background:#082a72!important}
+}
+
+/* Stronger contrast for glass surfaces and academic background marks. */
+body::after{opacity:.62;background-image:linear-gradient(rgba(8,42,114,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(8,42,114,.055) 1px,transparent 1px)}
+.hero::before{border-color:rgba(8,42,114,.3)!important;box-shadow:inset 0 0 0 16px rgba(8,42,114,.06),inset 0 0 0 52px rgba(8,42,114,.035),0 0 48px rgba(8,42,114,.1)!important}
+.hero::after{color:rgba(8,42,114,.7)!important}
+.intro-section::after{color:rgba(8,42,114,.11)!important;text-shadow:0 0 40px rgba(22,74,166,.1)!important}
+.services-section::before{border-color:rgba(8,42,114,.25)!important;box-shadow:inset 0 0 0 14px rgba(8,42,114,.055),inset 0 0 0 42px rgba(8,42,114,.03),0 0 60px rgba(8,42,114,.1)!important}
+.services-section::after{color:var(--navy-900)!important;font-size:11px!important;font-weight:850!important;opacity:.82}
+.process-section::before{border-left-color:rgba(8,42,114,.3)!important;box-shadow:7px 0 0 -6px rgba(8,42,114,.3),14px 0 0 -13px rgba(8,42,114,.3)!important}
+.process-section::after{color:rgba(8,42,114,.7)!important}
+.process-intro::before{border-color:rgba(8,42,114,.22);box-shadow:0 0 0 18px rgba(8,42,114,.045),0 0 0 42px rgba(8,42,114,.026),0 0 56px rgba(8,42,114,.1)}
+.process-intro::after,.contact-section::after{color:rgba(8,42,114,.11)!important}
+.why-section::before,.support-section::before,.contact-section::before,.site-footer::before,.journey-section::before{border-color:rgba(8,42,114,.2);box-shadow:inset 0 0 0 20px rgba(8,42,114,.04),inset 0 0 0 54px rgba(8,42,114,.022)}
+
+.nav-cta,.hero-media-caption,.contact-channel,.contact-channel-icon,.service-feature,.service-cta,.quick-consult-section,.form-field input,.form-field select,.form-field textarea{
+  border-color:var(--glass-border)!important;
+  background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.96),transparent 43%),linear-gradient(118deg,rgba(255,255,255,.62),rgba(219,232,255,.3) 48%,rgba(94,145,225,.22)),var(--glass)!important;
+  box-shadow:var(--glass-shadow)!important;
+}
+.journey-carousel,.journey-control,.case-note-grid article:not(:first-child),.service-facts div,.review-standard li,.sample-quote,.purchase-rules,.accountability-list article,.payment-summary,.policy-panel,.policy-disclosure,.faq-page details,.service-summary-cards article,.data-lifecycle,.pricing-terms,.form-details,.upload-privacy-note{
+  border-color:var(--glass-border)!important;
+  background:radial-gradient(circle at 14% 0%,rgba(255,255,255,.94),transparent 42%),linear-gradient(135deg,rgba(255,255,255,.68),rgba(211,228,255,.28)),rgba(234,242,255,.55)!important;
+  box-shadow:var(--glass-shadow)!important;
+}
+.journey-card{border-color:rgba(8,42,114,.16);background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(216,231,255,.48));box-shadow:inset 0 1px 0 #fff,0 12px 30px rgba(8,42,114,.09)}
+.journey-card:hover{border-color:rgba(8,42,114,.28);background:linear-gradient(145deg,#fff,rgba(210,229,255,.58))}
+.policy-panel h3,.payment-steps span{color:var(--ink)}
+
+/* Denser process cards with visible titles and stronger hierarchy. */
+.process-section{grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr);gap:clamp(48px,6vw,82px)}
+.process-list{display:grid;gap:14px}
+.process-list li,.process-list li:last-child{position:relative;display:grid;grid-template-columns:58px minmax(0,1fr);gap:20px;overflow:hidden;padding:25px 27px;margin:0;border:1px solid var(--glass-border);border-radius:16px;background:radial-gradient(circle at 8% 0%,rgba(255,255,255,.96),transparent 38%),linear-gradient(125deg,rgba(255,255,255,.72),rgba(213,230,255,.34)),rgba(234,242,255,.58);box-shadow:var(--glass-shadow)}
+.process-list li::before{content:"";position:absolute;width:92px;height:92px;right:-51px;top:-55px;border:1px solid rgba(8,42,114,.16);border-radius:50%;box-shadow:0 0 0 12px rgba(8,42,114,.026)}
+.process-list span{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--navy-900);box-shadow:0 10px 24px rgba(8,42,114,.2);color:#fff;font-size:14px;font-weight:850;letter-spacing:.04em}
+.process-list h3{margin:1px 0 9px;color:var(--navy-900)!important;font-size:clamp(1.4rem,2vw,1.72rem);font-weight:780;letter-spacing:-.035em;line-height:1.2}
+.process-list p{max-width:620px;margin:0;color:var(--ink-soft);font-size:17px;line-height:1.65}
+@media(max-width:850px){.process-section{grid-template-columns:1fr;gap:38px}}
+@media(max-width:560px){.process-list li,.process-list li:last-child{grid-template-columns:48px minmax(0,1fr);gap:14px;padding:21px 19px}.process-list span{width:40px;height:40px;border-radius:12px;font-size:12px}.process-list h3{font-size:21px}.process-list p{font-size:15.5px}}
+
+@media(prefers-reduced-transparency:reduce){
+  .nav-cta,.hero-media-caption,.contact-channel,.contact-channel-icon,.service-feature,.service-cta,.quick-consult-section,.form-field input,.form-field select,.form-field textarea,.journey-carousel,.journey-control,.case-note-grid article:not(:first-child),.service-facts div,.review-standard li,.sample-quote,.purchase-rules,.accountability-list article,.payment-summary,.policy-panel,.policy-disclosure,.faq-page details,.service-summary-cards article,.data-lifecycle,.pricing-terms,.form-details,.upload-privacy-note,.process-list li{background:#f4f8ff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   .editorial-block,.final-cta{background:#082a72!important}
 }
